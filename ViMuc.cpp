@@ -1,61 +1,61 @@
 #include "ViMuc.h"
 
 //--------------------------------------------------------------
-void testApp::setup(){
+void ViMuc::setup(){
 
 }
 
 //--------------------------------------------------------------
-void testApp::update(){
+void ViMuc::update(){
 
 }
 
 //--------------------------------------------------------------
-void testApp::draw(){
+void ViMuc::draw(){
 
 }
 
 //--------------------------------------------------------------
-void testApp::keyPressed(int key){
+void ViMuc::keyPressed(int key){
 
 }
 
 //--------------------------------------------------------------
-void testApp::keyReleased(int key){
+void ViMuc::keyReleased(int key){
 
 }
 
 //--------------------------------------------------------------
-void testApp::mouseMoved(int x, int y){
+void ViMuc::mouseMoved(int x, int y){
 
 }
 
 //--------------------------------------------------------------
-void testApp::mouseDragged(int x, int y, int button){
+void ViMuc::mouseDragged(int x, int y, int button){
 
 }
 
 //--------------------------------------------------------------
-void testApp::mousePressed(int x, int y, int button){
+void ViMuc::mousePressed(int x, int y, int button){
 
 }
 
 //--------------------------------------------------------------
-void testApp::mouseReleased(int x, int y, int button){
+void ViMuc::mouseReleased(int x, int y, int button){
 
 }
 
 //--------------------------------------------------------------
-void testApp::windowResized(int w, int h){
+void ViMuc::windowResized(int w, int h){
 
 }
 
 //--------------------------------------------------------------
-void testApp::gotMessage(ofMessage msg){
+void ViMuc::gotMessage(ofMessage msg){
 
 }
 
 //--------------------------------------------------------------
-void testApp::dragEvent(ofDragInfo dragInfo){ 
+void ViMuc::dragEvent(ofDragInfo dragInfo){
 
 }

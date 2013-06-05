@@ -2,7 +2,7 @@
 
 #include "ofMain.h"
 
-class testApp : public ofBaseApp{
+class ViMuc : public ofBaseApp{
 	public:
 		void setup();
 		void update();
