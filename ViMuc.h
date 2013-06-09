@@ -17,4 +17,11 @@ class ViMuc : public ofBaseApp{
 		void windowResized(int w, int h);
 		void dragEvent(ofDragInfo dragInfo);
 		void gotMessage(ofMessage msg);
+
+    ofSoundPlayer test;
+
+    int nBands;
+    float vals;
+    float *fftSmooth;
+    ofEasyCam cam;
 };
