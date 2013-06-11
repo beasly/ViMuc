@@ -1,4 +1,6 @@
 #include <cmath>
+#include <stdlib.h>
+#include <stdio.h>
 
 #include "ViMuc.h"
 
@@ -10,7 +12,15 @@ void ViMuc::setup() {
   cam.setDistance(600);
   cam.enableMouseInput();
 
-  test.loadSound("stout.mp3");
+  right = true;
+
+  angleX = 0;
+  angleY = 0;
+  angleZ = 0;
+
+  srand(time(NULL));
+
+  test.loadSound("begin.mp3");
   test.setVolume(0.75f);
 
   fftSmooth = new float[128];
@@ -18,11 +28,11 @@ void ViMuc::setup() {
     fftSmooth[i] = 0;
   }
 
-  nBands = 8;
+  nBands = 10;
 }
 
 void ViMuc::update() {
-  ofBackground(0, 0, 255);
+  ofBackground(0, 0, 50);
   ofSoundUpdate();
 
   float *val = ofSoundGetSpectrum(nBands);
@@ -34,17 +44,19 @@ void ViMuc::update() {
 }
 
 void ViMuc::draw() {
-
   cam.begin();
-  ofRotateX(ofRadToDeg(.5));
+  //ofRotateX(ofRadToDeg(.5));
 
-  float width = (float)90;
-  ofTranslate(-(nBands * width + 180) / 2, 0, 0);
+  defaultRotation();
+  modulatedRotation(fftSmooth[1], fftSmooth[5], fftSmooth[8]);
+
+  float width = (float)45;
+  ofTranslate(-(nBands * width) / 2, 0, 0);
 
   for (int i = 0; i < nBands; i++) {
-    float modu = fftSmooth[i] * pow((i + 1), 6/4);
+    float modu = 2 * fftSmooth[i] * pow((i + 1), 6/4);
 
-    ofTranslate(100, 0, 0);
+    ofTranslate(50, 0, 0);
 
     ofPushMatrix();
     ofSetColor(255, 0, 0);
@@ -58,6 +70,23 @@ void ViMuc::draw() {
   }
 
   cam.end();
+}
+
+void ViMuc::modulatedRotation(float deep, float mid, float high) {
+  angleX += !(right) ? deep * 5 : -(deep * 5);
+  angleY += !(right) ? mid * 7 : -(mid * 7);
+  angleZ += !(right) ? high * 10 : -(high * 10);
+  right = deep < 0.1 ? !right : right;
+}
+
+void ViMuc::defaultRotation() {
+  angleX = (abs(angleX) == 360) ? 0 : angleX;
+  angleY = (abs(angleY) == 360) ? 0 : angleY;
+  angleZ = (abs(angleZ) == 360) ? 0 : angleZ;
+
+  ofRotateX((float)angleX / 1);
+  ofRotateY((float)angleY / 1);
+  ofRotateZ((float)angleZ / 1);
 }
 
 void ViMuc::keyPressed(int key) {
