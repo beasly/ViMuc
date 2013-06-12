@@ -5,12 +5,17 @@
 
 Blox::Blox() {
   this->nBands = 10;
+  fftSmooth = new float[128];
+  for (int i = 0; i < 128; i++) {
+    fftSmooth[i] = 0;
+  }
 }
 
 void Blox::update() {
   float *val = ofSoundGetSpectrum(nBands);
 
   for (int i = 0; i < nBands; i++) {
+    cout << sizeof(fftSmooth) << " " << i << endl;
     fftSmooth[i] *= 0.97f;
     fftSmooth[i] = fftSmooth[i] < val[i] ? val[i] : fftSmooth[i];
   }
@@ -21,7 +26,7 @@ void Blox::draw() {
   ofTranslate(-(nBands * width) / 2, 0, 0);
 
   for (int i = 0; i < nBands; i++) {
-    float modu = 2 * fftSmooth[i] * pow((i + 1), 6/4);
+    float modu = 2 * fftSmooth[i] * pow((i + 1.0), 6/4);
 
     ofTranslate(50, 0, 0);
     ofSphere(100 * modu);

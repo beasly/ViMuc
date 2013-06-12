@@ -21,10 +21,10 @@ void ViMuc::setup() {
 
   srand(time(NULL));
 
-  test.loadSound("nts.mp3");
+  test.loadSound("1-02 Cabaret.mp3");
   test.setVolume(0.75f);
 
-  //blocks.setBands(10);
+  blocks.setBands(10);
 }
 
 void ViMuc::update() {
