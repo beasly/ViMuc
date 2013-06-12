@@ -4,13 +4,14 @@
 
 class Blox {
   public:
-    Blox(ofSoundPlayer& soundPlayer, int nBands);
+    Blox();
 
     void update();
     void draw();
 
+    void setBands(int bands);
+
   private:
     int nBands;
-    ofSoundPlayer soundPlayer;
     float *fftSmooth;
 };

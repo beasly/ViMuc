@@ -3,8 +3,9 @@
 #include "ofMain.h"
 #include "Blox.h"
 
-class ViMuc : public ofBaseApp{
+class ViMuc : public ofBaseApp {
   public:
+    ViMuc() : blocks() {}
     void setup();
     void update();
     void draw();

@@ -3,9 +3,8 @@
 #include "ofMain.h"
 #include "Blox.h"
 
-
-Blox::Blox(ofSoundPlayer& soundPlayer, int nBands) {
-  this->nBands = nBands;
+Blox::Blox() {
+  this->nBands = 10;
 }
 
 void Blox::update() {
@@ -18,15 +17,14 @@ void Blox::update() {
 }
 
 void Blox::draw() {
-  cout << "draw" << endl;
   float width = (float)45;
   ofTranslate(-(nBands * width) / 2, 0, 0);
-  cout << "3" << endl;
 
   for (int i = 0; i < nBands; i++) {
     float modu = 2 * fftSmooth[i] * pow((i + 1), 6/4);
 
     ofTranslate(50, 0, 0);
+    ofSphere(100 * modu);
 
     ofPushMatrix();
     ofSetColor(255, 0, 0);
@@ -40,3 +38,6 @@ void Blox::draw() {
   }
 }
 
+void Blox::setBands(int bands) {
+  this->nBands = bands;
+}

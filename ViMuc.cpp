@@ -24,16 +24,14 @@ void ViMuc::setup() {
   test.loadSound("nts.mp3");
   test.setVolume(0.75f);
 
-  nBands = 10;
-  cout << "main 1" << endl;
-  blocks = Blox(test, nBands);
+  //blocks.setBands(10);
 }
 
 void ViMuc::update() {
   ofBackground(0, 0, 50);
   ofSoundUpdate();
 
-  blocks->update();
+  blocks.update();
 }
 
 void ViMuc::draw() {
@@ -42,7 +40,7 @@ void ViMuc::draw() {
   //defaultRotation();
   //modulatedRotation(fftSmooth[1], fftSmooth[5], fftSmooth[8]);
 
-  blocks->draw();
+  blocks.draw();
 
   cam.end();
 }
