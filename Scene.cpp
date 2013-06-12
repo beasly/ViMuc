@@ -14,13 +14,7 @@ Scene::Scene() {
   }
 }
 
-void Scene::setup() {
-  right = true;
-
-  angleX = 0;
-  angleY = 0;
-  angleZ = 0;
-}
+void Scene::setup() {}
 
 void Scene::update() {
   ofSoundUpdate();
@@ -69,22 +63,3 @@ void Scene::setBands(int bands) {
 int Scene::getBands() const {
   return this->nBands;
 }
-
-void Scene::modulatedRotation(float deep, float mid, float high) {
-  angleX += !(right) ? deep * 5 : -(deep * 4);
-  angleY += !(right) ? mid * 7 : -(mid * 9);
-  angleZ += !(right) ? high * 10 : -(high * 19);
-
-  right = deep < 0.25 ? !right : right;
-}
-
-void Scene::defaultRotation() {
-  angleX = (abs(angleX) == 360) ? 0 : angleX;
-  angleY = (abs(angleY) == 360) ? 0 : angleY;
-  angleZ = (abs(angleZ) == 360) ? 0 : angleZ;
-
-  ofRotateX((float)angleX / 1);
-  ofRotateY((float)angleY / 1);
-  ofRotateZ((float)angleZ / 1);
-}
-
