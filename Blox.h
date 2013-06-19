@@ -1,17 +1,11 @@
 #pragma once
 
 #include "ofMain.h"
+#include "Scene.h"
 
-class Blox {
+class Blox : public Scene {
   public:
     Blox();
 
-    void update();
     void draw();
-
-    void setBands(int bands);
-
-  private:
-    int nBands;
-    float *fftSmooth;
 };
