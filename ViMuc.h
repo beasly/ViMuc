@@ -1,11 +1,11 @@
 #pragma once
 
 #include "ofMain.h"
-#include "Blox.h"
+#include "Scene.h"
 
 class ViMuc : public ofBaseApp {
   public:
-    ViMuc() : blocks() {}
+    ViMuc() {}
     void setup();
     void update();
     void draw();
@@ -21,15 +21,7 @@ class ViMuc : public ofBaseApp {
     void gotMessage(ofMessage msg);
 
   private:
-    Blox blocks;
-    bool right;
+    Scene *scene;
     ofSoundPlayer test;
-    int nBands;
     ofEasyCam cam;
-    int angleX;
-    int angleY;
-    int angleZ;
-
-    void modulatedRotation(float deep, float mid, float high);
-    void defaultRotation();
 };
