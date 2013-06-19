@@ -34,7 +34,25 @@ void Scene::update() {
   }
 }
 
-void Scene::draw() {};
+void Scene::draw() { };
+
+void Scene::keyPressed(int key) { }
+
+void Scene::keyReleased(int key) { }
+
+void Scene::mouseMoved(int x, int y) { }
+
+void Scene::mouseDragged(int x, int y, int button) { }
+
+void Scene::mousePressed(int x, int y, int button) { }
+
+void Scene::mouseReleased(int x, int y, int button) { }
+
+void Scene::windowResized(int w, int h) { }
+
+void Scene::gotMessage(ofMessage msg) { }
+
+void Scene::dragEvent(ofDragInfo dragInfo) { }
 
 float* Scene::getFFTSmooth() const {
   return fftSmooth;

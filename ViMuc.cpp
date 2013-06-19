@@ -20,7 +20,6 @@ void ViMuc::setup() {
 
   test.loadSound("skank.mp3");
   test.setVolume(0.75f);
-  test.play();
 
   scene->setup();
 }
@@ -46,7 +45,6 @@ void ViMuc::keyPressed(int key) {
       test.stop();
       break;
   }
-  cout << key << endl;
 }
 
 void ViMuc::keyReleased(int key) { }
