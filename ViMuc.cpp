@@ -21,7 +21,7 @@ void ViMuc::setup() {
 
   srand(time(NULL));
 
-  test.loadSound("1-02 Cabaret.mp3");
+  test.loadSound("skank.mp3");
   test.setVolume(0.75f);
 
   blocks.setBands(10);
