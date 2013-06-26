@@ -5,13 +5,15 @@
 #include "ViMuc.h"
 #include "Scene.h"
 #include "Blox.h"
+#include "Galaxy.h"
 
 void ViMuc::setup() {
   ofSetVerticalSync(true);
   glEnable(GL_DEPTH_TEST);
   ofEnableSmoothing();
 
-  scene = new Blox();
+//  scene = new Blox();
+  scene = new Galaxy();
 
   srand(time(NULL));
 

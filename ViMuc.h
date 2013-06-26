@@ -20,6 +20,7 @@ class ViMuc : public ofBaseApp {
     void dragEvent(ofDragInfo dragInfo);
     void gotMessage(ofMessage msg);
 
+
   private:
     Scene *scene;
     ofSoundPlayer test;
