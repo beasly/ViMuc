@@ -18,7 +18,7 @@ void ViMuc::setup() {
 
   srand(time(NULL));
 
-  test.loadSound("skank.mp3");
+  test.loadSound("begin.mp3");
   test.setVolume(0.75f);
 
   scene->setup();

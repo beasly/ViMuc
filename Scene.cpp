@@ -34,7 +34,7 @@ void Scene::update() {
   }
 }
 
-void Scene::draw() { };
+void Scene::draw() { }
 
 void Scene::keyPressed(int key) { }
 
