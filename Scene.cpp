@@ -4,6 +4,13 @@
 #include "Scene.h"
 #include "Rotator.h"
 
+/**
+ * The Scene class is the skeleton of every actual scene in the ViMuc
+ * application. It provides the OF methods to be overwritten by the individual
+ * scenes. Furthermore the scene class provides it's children the FFT data
+ * in two arrays. One array has the plain fft data, the other has the smoothed
+ * fft values.
+ */
 Scene::Scene() {
   this->nBands = 10;
 
