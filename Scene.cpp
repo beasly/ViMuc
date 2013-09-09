@@ -1,8 +1,8 @@
-#include <cmath>
 #include <stdlib.h>
 #include <stdio.h>
 
 #include "Scene.h"
+#include "Rotator.h"
 
 Scene::Scene() {
   this->nBands = 10;
@@ -12,6 +12,8 @@ Scene::Scene() {
   for (int i = 0; i < 128; i++) {
     fftSmooth[i] = 0;
   }
+
+  Rotator * rotator = new Rotator();
 }
 
 void Scene::setup() {}

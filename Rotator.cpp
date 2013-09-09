@@ -1,11 +1,11 @@
 #include <stdlib.h>
+#include <cmath>
 
 #include "ofMain.h"
 #include "Rotator.h"
 
 Rotator::Rotator() {
-  float * angles;
-  bool right = true;
+  right = true;
 }
 
 void Rotator::modulatedRotation(float deep, float mid, float high) {
@@ -17,12 +17,14 @@ void Rotator::modulatedRotation(float deep, float mid, float high) {
 }
 
 void Rotator::defaultRotation() {
-  angles[0] = (abs(angleX) == 360) ? 0 : angleX;
-  angles[1] = (abs(angleY) == 360) ? 0 : angleY;
-  angles[2] = (abs(angleZ) == 360) ? 0 : angleZ;
+  angles[0] = (abs(angles[0]) == 360) ? 0 : angles[0];
+  angles[1] = (abs(angles[1]) == 360) ? 0 : angles[1];
+  angles[2] = (abs(angles[2]) == 360) ? 0 : angles[2];
+}
 
-  ofRotateX((float)angleX / 1);
-  ofRotateY((float)angleY / 1);
-  ofRotateZ((float)angleZ / 1);
+void Rotator::rotate() const {
+  ofRotateX((float)angles[0] / 1);
+  ofRotateY((float)angles[1] / 1);
+  ofRotateZ((float)angles[2] / 1);
 }
 

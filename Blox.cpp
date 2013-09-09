@@ -6,11 +6,12 @@
 Blox::Blox() {}
 
 void Blox::draw() {
+  rotator.modulatedRotation(getFFTSmooth()[0], getFFTSmooth()[4], getFFTSmooth()[8]);
+  rotator.defaultRotation();
+  rotator.rotate();
+
   float width = (float)45;
   ofTranslate(-(getBands() * width) / 2, 0, 0);
-
-  defaultRotation();
-  modulatedRotation(getFFTSmooth()[0], getFFTSmooth()[4], getFFTSmooth()[8]);
 
   for (int i = 0; i < getBands(); i++) {
     float modu = 2 * getFFTSmooth()[i] * pow((i + 1.0), 6/4);

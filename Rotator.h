@@ -6,8 +6,11 @@ class Rotator {
   public:
     Rotator();
 
-  private:
-    float *modulators;
-    void modulatedRotation();
+    void modulatedRotation(float deep, float mid, float high);
     void defaultRotation();
+    void rotate() const;
+
+  private:
+    bool right;
+    float angles[3] = {};
 };
