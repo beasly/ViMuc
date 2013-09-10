@@ -9,9 +9,8 @@ Scene::Scene() {
 
   fftPlain = new float[128];
   fftSmooth = new float[128];
-  for (int i = 0; i < 128; i++) {
-    fftSmooth[i] = 0;
-  }
+  fill_n(fftSmooth, sizeof(fftSmooth), 0);
+  fill_n(fftPlain, sizeof(fftSmooth), 0);
 
   Rotator * rotator = new Rotator();
 }
