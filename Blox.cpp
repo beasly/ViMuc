@@ -35,7 +35,6 @@ void Blox::draw() {
 
   /** Pass the modu function pointer to the customModulatedRotation method */
   rotator.customModulatedRotation(modu, vals);
-  rotator.defaultRotation();
   rotator.rotate();
 
   float width = (float)45;

@@ -16,7 +16,7 @@ class Rotator {
      */
     void customModulatedRotation(void (*modu)(float*, bool), float *vals);
     void modulatedRotation(float deep, float mid, float high);
-    void defaultRotation();
+    void checkFullRotation();
     void rotate() const;
 
   private:
