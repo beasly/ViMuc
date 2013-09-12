@@ -3,23 +3,18 @@
 #include <math.h>
 
 Terrain::Terrain() {
-  this->nBands = 10;
-  fftSmooth = new float[128];
-  for (int i = 0; i < 128; i++) {
-    fftSmooth[i] = 0;
-  }
-  meshResolution = 1024;
+
+  meshResolution = 256;
   gridSurfaceSetup();
   //setPeeks();
   //debug_vertex();
-  set_sinus_heights();
+  //set_sinus_heights();
+
   set_colors();
-  set_sinus_heights();
-  set_sinus_heights();
   //Light
   //light.setPointLight();
-
   getheight();
+
 
 }
 
@@ -51,7 +46,7 @@ cout << "number of meshresolution " << meshResolution << endl;
 	}
 
 }
-
+/*
 void Terrain::update() {
   float *val = ofSoundGetSpectrum(nBands);
 
@@ -59,13 +54,15 @@ void Terrain::update() {
     fftSmooth[i] *= 0.97f;
     fftSmooth[i] = fftSmooth[i] < val[i] ? val[i] : fftSmooth[i];
   }
+test_heights();
+  //module_terrain();
 
   //Light
 
 //  light.setPosition(cos (ofGetElapsedTimef()) * 200 + 200, 200, sin (ofGetElapsedTimef() * 200));
-    light.setPosition(ofVec3f(512, 20, 512));
+   // light.setPosition(ofVec3f(512, 20, 512));
 }
-
+*/
 void Terrain::draw() {
   //Light
   //ofEnableLighting();
@@ -73,18 +70,16 @@ void Terrain::draw() {
 
 
   ofPushStyle();
-  ofTranslate(-(meshResolution / 8), 0, -(meshResolution / 8));
+  ofTranslate(-(meshResolution / 2), 0, -(meshResolution / 2));
   ofSetColor(255, 255, 255);
   //gridMesh.drawWireframe();
   gridMesh.draw();
-  test();
+  test_heights();
 
   ofPopStyle();
 }
 
-void Terrain::setBands(int bands) {
-  this->nBands = bands;
-}
+
 
 void Terrain::setPeeks() {
   int count = 0;
@@ -126,6 +121,9 @@ void Terrain::set_sinus_heights() {
 
 
 void Terrain::test_heights() {
+
+  /*
+
   ofVec3f vector;
   int count = 0;
   for (int row = 0; row < meshResolution; row++) {
@@ -143,37 +141,51 @@ void Terrain::test_heights() {
   for (int j = 0; j < testvector.size(); j++) {
     test = testvector.at(j);
       vector = gridMesh.getVertex(test);
-      vector.y = 5;
+      vector.y = 100;
       gridMesh.setVertex(test, vector);
 
       vector = gridMesh.getVertex(test+1);
-      vector.y = 3;
+      vector.y = 100;
       gridMesh.setVertex(test+1, vector);
 
       vector = gridMesh.getVertex(test+2);
-      vector.y = 3;
+      vector.y = 100;
       gridMesh.setVertex(test+2, vector);
 
   }
+
+  */
+  ofVec3f vector;
+  for (int j = 0; j < getBands(); j++) {
+    for (int i = 0; i < 1024; i++) {
+   vector = gridMesh.getVertex(i);
+   vector.y = 100 + (100 / getFFTSmooth()[j]);
+   //cout << "FFT Smooth " << getFFTSmooth()[j] << endl;/*<< " * 100 " << 100 * getFFTSmooth()[j] << endl*/;
+   gridMesh.setVertex(i, vector);
+  }
+
+  }
+
+
 }
 
 
 
 
 void Terrain::test() {
-
+/*
   ofVec3f vector;
 
   int range = 0;
   float modulation = 0;
 
-    for (int i = 0; i < nBands; i++) {
+    for (int i = 0; i < getBands(); i++) {
 
       modulation = 2 * fftSmooth[i] * pow((i + 1.0), 6/4);
 
       cout << "Modulation is " << modulation * 2 << endl;
 
-      for (int j = range; j < (peeks.size() / nBands) + range; j++) {
+      for (int j = range; j < (peeks.size() / getBands()) + range; j++) {
         if (j % 24 == 0) {
           vector = gridMesh.getVertex(peeks[j]);
           vector.y = 2 * modulation;
@@ -181,11 +193,11 @@ void Terrain::test() {
 
         }
       }
-      range+=(peeks.size() / nBands);
+      range+=(peeks.size() / getBands());
 
     }
 
-
+*/
 
 
 
@@ -198,18 +210,18 @@ void Terrain::set_colors() {
     float n;
     unsigned char r, g, b;
     ofColor color_array[200];
-    for( i = 1; i <= steps / 2; i++ )
+    for( i = 1; i <= steps ; i++ )
     {
 
         n = (float)i / (float) (steps-1);
-        r = (float) 0 * (1.0f-n) + (float) 38* n;
-        g = (float) 7 * (1.0f-n) + (float) 172 * n;
-        b = (float) 299 * (1.0f-n) + (float) 22 * n;
+        r = (float) 18 * (1.0f-n) + (float) 38* n;
+        g = (float) 1 * (1.0f-n) + (float) 172 * n;
+        b = (float) 194 * (1.0f-n) + (float) 22 * n;
         ofColor t(r,g,b);
         color_array[i] = t;
-        cout << " Color " << i << " is " << t << endl;
-    }
 
+    }
+/*
      for( i = steps / 2; i <= steps; i++ )
     {
 
@@ -222,7 +234,7 @@ void Terrain::set_colors() {
         cout << " Color " << i << " is " << t << endl;
     }
 
-
+*/
 
     for (int i=0; i < gridMesh.getNumVertices(); i++) {
             ofVec3f v = gridMesh.getVertex(i);
@@ -245,3 +257,36 @@ void Terrain::getheight() {
   cout << "Lowest Y is " << lowest << endl;
 
 }
+
+void Terrain::module_terrain() {
+    ofVec3f vector;
+
+
+  float modulation = 0;
+
+
+
+
+    for (int i = 0; i < getBands(); i++) {
+
+        modulation = 2 * getFFTSmooth()[i] * pow((i + 1.0), 6/4);
+
+
+        for (int i = 0; i < 100000; i++)
+          vector = gridMesh.getVertex(i);
+          vector.y = 100 * modulation;
+          cout << "Modulation is " << modulation << endl;
+          gridMesh.setVertex(i, vector);
+    }
+
+
+}
+
+/*
+void Terrain::normalize_heights() {
+
+}
+
+*/
+
+

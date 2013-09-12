@@ -10,8 +10,8 @@ class Terrain : public Scene{
 
 
 private:
-  int nBands;
-  float *fftSmooth;
+  //int nBands;
+  //float *fftSmooth;
   ofVboMesh gridMesh;
   ofLight light;
 
@@ -36,7 +36,7 @@ public:
 
   // ofMesh gridMesh;
   Terrain();
-  void update();
+  //void update();
   void draw();
   void setBands(int bands);
   void gridSurfaceSetup();
@@ -45,6 +45,8 @@ public:
 
   void set_colors();
   void getheight();
+
+  void module_terrain();
 
 
 
