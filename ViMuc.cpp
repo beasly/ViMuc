@@ -6,6 +6,7 @@
 #include "Scene.h"
 #include "Blox.h"
 #include "Galaxy.h"
+#include "Terrain.h"
 
 void ViMuc::setup() {
   ofSetVerticalSync(true);
@@ -13,6 +14,10 @@ void ViMuc::setup() {
   ofEnableSmoothing();
 
   scene = new Galaxy();
+
+  dist = 600;
+  cam.setDistance(dist);
+  cam.enableMouseInput();
 
   srand(time(NULL));
 

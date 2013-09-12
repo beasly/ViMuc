@@ -35,7 +35,7 @@ void Terrain::gridSurfaceSetup() {
         gridMesh.addVertex( ofPoint( row * 2 , 0.0f , column * 2 ));
       }
     }
-julian.c.fink@googlemail.com
+
 cout << "number of meshresolution " << meshResolution << endl;
 
   int maxIndexValue = meshResolution*(meshResolution-1)-1;
@@ -49,7 +49,7 @@ cout << "number of meshresolution " << meshResolution << endl;
 
     gridMesh.addTriangle( meshResolution+i, meshResolution+i+1,              i+1 );
 	}
-julian.c.fink@googlemail.com
+
 }
 
 void Terrain::update() {
