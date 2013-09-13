@@ -43,14 +43,27 @@ void Blox::draw() {
   for (int i = 0; i < getBands(); i++) {
     float modu = 2 * getFFTSmooth()[i] * pow((i + 1.0), 6 / 4);
 
+    tex.allocate(width, modu, GL_RGB);
+    colorPixels = new unsigned char [(int)((width * modu) + 1) * 3];
+    for (int i = 0; i < width; i++) {
+      for (int j = 0; j < modu; j++) {
+        colorPixels[(j * (int)(width) + i) * 3 + 0] = i;
+        colorPixels[(j * (int)(width) + i) * 3 + 1] = j;
+        colorPixels[(j * (int)(width) + i) * 3 + 2] = 0;
+      }
+    }
+    tex.loadData(colorPixels, width, modu, GL_RGB);
+
     ofTranslate(50, 0, 0);
     //ofSphere(100 * modu);
 
     ofPushMatrix();
-    ofSetColor(255, 0, 0);
-    ofFill();
+    //ofSetColor(255, 0, 0);
+    //ofFill();
+    tex.bind();
     ofScale(0.6, modu, 1);
     ofBox(width);
+    tex.unbind();
     ofSetColor(0);
     ofNoFill();
     ofBox(width);
