@@ -13,7 +13,8 @@ Terrain::Terrain() {
   set_colors();
   //Light
   //light.setPointLight();
-  getheight();
+  //getheight();
+  test_heights();
 
 
 }
@@ -74,8 +75,10 @@ void Terrain::draw() {
   ofSetColor(255, 255, 255);
   //gridMesh.drawWireframe();
   gridMesh.draw();
-  test_heights();
-
+  //test_heights();
+  //show_fft();
+  //debug_fft();
+  module_terrain();
   ofPopStyle();
 }
 
@@ -157,16 +160,17 @@ void Terrain::test_heights() {
   */
   ofVec3f vector;
   for (int j = 0; j < getBands(); j++) {
-    for (int i = 0; i < 1024; i++) {
+    for (int i = 0; i < meshResolution; i++) {
    vector = gridMesh.getVertex(i);
-   vector.y = 100 + (100 / getFFTSmooth()[j]);
+   vector.y = 100;
+   //cout << 100 + (getFFTSmooth()[j]) << endl;
    //cout << "FFT Smooth " << getFFTSmooth()[j] << endl;/*<< " * 100 " << 100 * getFFTSmooth()[j] << endl*/;
    gridMesh.setVertex(i, vector);
   }
 
   }
 
-
+    //debug_fft();
 }
 
 
@@ -269,12 +273,12 @@ void Terrain::module_terrain() {
 
     for (int i = 0; i < getBands(); i++) {
 
-        modulation = 2 * getFFTSmooth()[i] * pow((i + 1.0), 6/4);
+        modulation = (200 * getFFTSmooth()[i]);
 
 
-        for (int i = 0; i < 100000; i++)
+        for (int i = 0; i < gridMesh.getNumVertices(); i++)
           vector = gridMesh.getVertex(i);
-          vector.y = 100 * modulation;
+          vector.y = modulation;
           cout << "Modulation is " << modulation << endl;
           gridMesh.setVertex(i, vector);
     }
@@ -282,6 +286,27 @@ void Terrain::module_terrain() {
 
 }
 
+void Terrain::debug_fft() {
+ vector<float> fft;
+
+ for (int i = 0; i < getBands(); i++) {
+    if (highest < getFFTSmooth()[i])
+     highest = getFFTSmooth()[i];
+    if (lowest > getFFTSmooth()[i])
+     lowest = getFFTSmooth()[i];
+    cout << "highest : "<< highest << endl;
+    cout << "lowest : "<< lowest << endl;
+}
+
+}
+
+void Terrain::show_fft() {
+
+for (int i = 0; i < getBands(); i++) {
+    cout << "Band: " << i << " Value: " << getFFTSmooth()[i] << endl;
+}
+
+}
 /*
 void Terrain::normalize_heights() {
 

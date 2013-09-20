@@ -30,6 +30,8 @@ private:
   void test_heights();
   void setBandHeight(float modu, float range);
 
+ float highest;
+ float lowest;
 
 
 public:
@@ -48,6 +50,8 @@ public:
 
   void module_terrain();
 
+   void debug_fft();
+   void show_fft();
 
 
 
