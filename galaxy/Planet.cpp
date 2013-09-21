@@ -22,27 +22,45 @@ bool Planet::operator !=(Planet otherPlanet) const {
     return true;
   } else if (radius != otherPlanet.getRadius()) {
     return true;
-  } else if (distanceToSun != otherPlanet.getDistanceToSun()) {
-    return true;
-  }else{
+  } else{
     return false;
   }
 }
 
-int Planet::getDistanceToSun() {
-  return distanceToSun;
-}
 
 void Planet::setPosition(ofVec3f position) {
   this->position = position;
+}
+
+void Planet::addRotationAngle() {
+  rotationAngle += rotationSpeed*0.25;
+  if (rotationAngle > 360) {
+    rotationAngle -= 360;
+  }
 }
 
 void Planet::setPositionOfSun(ofVec3f position) {
   positionOfSun = position;
 }
 
+float Planet::getRotationAngle() {
+  return rotationAngle;
+}
+
+int Planet::getGalaxyIndex() {
+  return galaxyIndex;
+}
+
+int Planet::getPlanetIndex() {
+  return planetIndex;
+}
+
 ofVec3f Planet::getPositionOfSun() {
   return positionOfSun;
+}
+
+void Planet::setPlanetIndex(int planetIndex) {
+  this->planetIndex = planetIndex;
 }
 
 Planet::Planet() {
@@ -56,12 +74,20 @@ int Planet::getRadius() {
   return radius;
 }
 
-void Planet::setDistanceToSun(int distance) {
-  distanceToSun = distance;
-}
-
 ofVec3f Planet::getPosition() {
   return position;
+}
+
+void Planet::setGalaxyIndex(int galaxyIndex) {
+  this->galaxyIndex = galaxyIndex;
+}
+
+void Planet::setRotationAngle(float rotationAngle) {
+  this->rotationAngle = rotationAngle;
+}
+
+void Planet::setRotationSpeed(float rotationSpeed) {
+  this->rotationSpeed = rotationSpeed;
 }
 
 void Planet::setMovable(bool movable) {

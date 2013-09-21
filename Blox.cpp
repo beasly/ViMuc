@@ -3,7 +3,8 @@
 
 #include "Blox.h"
 
-Blox::Blox() {}
+Blox::Blox() {
+}
 
 /**
  * This is the function I want to use as modulator for the rotation of my
@@ -13,7 +14,7 @@ Blox::Blox() {}
  * referenced and called is a method of the Rotator class.
  * This behaviour is dangerous, so don't do stupid things with it.
  */
-void modulate(float* vals, bool right) {
+void modulate(float *vals, bool right) {
   vals[0] += !(right) ? vals[0] * 1 : -(vals[0] * 1);
   vals[1] += !(right) ? vals[1] * 2 : -(vals[1] * 2);
   vals[2] += !(right) ? vals[2] * 4 : -(vals[2] * 4);
@@ -23,11 +24,11 @@ void modulate(float* vals, bool right) {
 
 void Blox::draw() {
   /** Initialiez a function pointer */
-  void (*modu)(float*, bool);
+  void (*modu)(float *, bool);
   /** Assign the modulate function to the pointer */
   modu = &modulate;
 
-  float *vals = new float[3];
+  float *vals = new float [3];
 
   vals[0] = getFFTSmooth()[0];
   vals[1] = getFFTSmooth()[3];
@@ -37,11 +38,11 @@ void Blox::draw() {
   rotator.customModulatedRotation(modu, vals);
   rotator.rotate();
 
-  float width = (float)45;
+  float width = (float) 45;
   ofTranslate(-(getBands() * width) / 2, 0, 0);
 
   for (int i = 0; i < getBands(); i++) {
-    float modu = 2 * getFFTSmooth()[i] * pow((i + 1.0), 6/4);
+    float modu = 2 * getFFTSmooth()[i] * pow((i + 1.0), 6 / 4);
 
     ofTranslate(50, 0, 0);
     //ofSphere(100 * modu);

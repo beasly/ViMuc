@@ -25,24 +25,13 @@ class Galaxy : public Scene {
   void draw();
   void setup();
   int irand(int min, int max) const;
-  void setPlanets(int planetAmount);
-
   void updatePhysics(time_t animationTime);
-
   void updateForces(double deltaTime);
-
   void updatePosition(double deltaTime);
-
-
-  void rotatePlanet(Planet planet);
-
-  void locateToSun(Planet planet);
-
 
   private:
   int planetAmount;
-  vector<Planet> planets;
-  int rotationDegree;
+  vector<Planet> galaxyList;
   time_t lastPhyicsAnimationTime;
 };
 
