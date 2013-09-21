@@ -1,10 +1,13 @@
 #pragma once
 
 #include "ofMain.h"
+#include "Rotator.h"
 
 class Scene : public ofBaseApp {
   public:
     Scene();
+
+    Rotator rotator;
 
     void setup();
     void update();
@@ -22,18 +25,11 @@ class Scene : public ofBaseApp {
 
     float* getFFTSmooth() const;
     float* getFFTPlain() const;
-    void modulatedRotation(float deep, float mid, float high);
-    void defaultRotation();
     void setBands(int bands);
     int getBands() const;
 
   private:
     int nBands;
-
-    bool right;
-    int angleX;
-    int angleY;
-    int angleZ;
 
     float *fftSmooth;
     float *fftPlain;
