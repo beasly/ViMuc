@@ -13,10 +13,6 @@ void ViMuc::setup() {
 
   scene = new Blox();
 
-  dist = 600;
-  cam.setDistance(dist);
-  cam.enableMouseInput();
-
   srand(time(NULL));
 
   test.loadSound("begin.mp3");
@@ -30,11 +26,7 @@ void ViMuc::update() {
 }
 
 void ViMuc::draw() {
-  cam.begin();
-
   scene->draw();
-
-  cam.end();
 }
 
 void ViMuc::keyPressed(int key) {
@@ -45,13 +37,7 @@ void ViMuc::keyPressed(int key) {
     case 'w':
       test.stop();
       break;
-    case 'o':
-      dist += 10;
-      cam.setDistance(dist);
-      break;
-    case 'l':
-      dist -= 10;
-      cam.setDistance(dist);
+    default:
       break;
   }
 
