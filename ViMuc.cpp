@@ -5,21 +5,23 @@
 #include "ViMuc.h"
 #include "Scene.h"
 #include "Blox.h"
+#include "Galaxy.h"
 
 void ViMuc::setup() {
   ofSetVerticalSync(true);
   glEnable(GL_DEPTH_TEST);
   ofEnableSmoothing();
 
-  scene = new Blox();
+//  scene = new Blox();
+  scene = new Galaxy();
 
-  dist = 600;
+  dist = 800;
   cam.setDistance(dist);
   cam.enableMouseInput();
 
   srand(time(NULL));
 
-  test.loadSound("begin.mp3");
+  test.loadSound("skank.mp3");
   test.setVolume(0.75f);
 
   scene->setup();
@@ -54,7 +56,6 @@ void ViMuc::keyPressed(int key) {
       cam.setDistance(dist);
       break;
   }
-
   scene->keyPressed(key);
 }
 
