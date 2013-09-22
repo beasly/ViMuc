@@ -12,7 +12,9 @@
  * fft values.
  */
 Scene::Scene() {
-  this->nBands = 10;
+  nBands = 10;
+  filter = 1;
+  smoothingFactor = 0.97f;
 
   fftPlain = new float[128];
   fftSmooth = new float[128];
@@ -27,34 +29,36 @@ void Scene::setup() {}
 void Scene::update() {
   ofSoundUpdate();
 
-  float *val = ofSoundGetSpectrum(nBands);
+  int filteredNBands = (int) (filter * nBands);
+
+  float *val = ofSoundGetSpectrum(filteredNBands);
 
   for (int i = 0; i < nBands; i++) {
     fftPlain[i] = val[i];
-    fftSmooth[i] *= 0.97f;
+    fftSmooth[i] *= smoothingFactor;
     fftSmooth[i] = fftSmooth[i] < val[i] ? val[i] : fftSmooth[i];
   }
 }
 
-void Scene::draw() { }
+void Scene::draw() {}
 
-void Scene::keyPressed(int key) { }
+void Scene::keyPressed(int key) {}
 
-void Scene::keyReleased(int key) { }
+void Scene::keyReleased(int key) {}
 
-void Scene::mouseMoved(int x, int y) { }
+void Scene::mouseMoved(int x, int y) {}
 
-void Scene::mouseDragged(int x, int y, int button) { }
+void Scene::mouseDragged(int x, int y, int button) {}
 
-void Scene::mousePressed(int x, int y, int button) { }
+void Scene::mousePressed(int x, int y, int button) {}
 
-void Scene::mouseReleased(int x, int y, int button) { }
+void Scene::mouseReleased(int x, int y, int button) {}
 
-void Scene::windowResized(int w, int h) { }
+void Scene::windowResized(int w, int h) {}
 
-void Scene::gotMessage(ofMessage msg) { }
+void Scene::gotMessage(ofMessage msg) {}
 
-void Scene::dragEvent(ofDragInfo dragInfo) { }
+void Scene::dragEvent(ofDragInfo dragInfo) {}
 
 float* Scene::getFFTSmooth() const {
   return fftSmooth;
@@ -64,10 +68,20 @@ float* Scene::getFFTPlain() const {
   return fftPlain;
 }
 
-void Scene::setBands(int bands) {
-  this->nBands = bands;
+void Scene::setBands(int _bands) {
+  nBands = _bands;
+}
+
+void Scene::setFilter(float _filter) {
+  filter = _filter;
+}
+
+void Scene::setSmoothingFactor(float _smoothingFactor) {
+  smoothingFactor = _smoothingFactor;
 }
 
 int Scene::getBands() const {
-  return this->nBands;
+  return nBands;
 }
+
+
