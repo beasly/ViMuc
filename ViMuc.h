@@ -24,4 +24,6 @@ class ViMuc : public ofBaseApp {
     Scene *scene;
     ofSoundPlayer test;
     ofEasyCam cam;
+
+    int dist;
 };
