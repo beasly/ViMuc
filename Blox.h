@@ -9,8 +9,11 @@ class Blox : public Scene {
 
     void draw();
     void setup();
+    void keyPressed(int key);
 
   private:
+    ofEasyCam cam;
+    int dist;
     ofTexture tex;
     unsigned char *colorPixels;
 };

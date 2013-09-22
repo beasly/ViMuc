@@ -26,9 +26,13 @@ void rotate(float* vals, bool right) {
 void Blox::setup() {
   setBands(10);
   ofEnableNormalizedTexCoords();
+  dist = 800;
+  cam.setDistance(dist);
+  cam.enableMouseInput();
 }
 
 void Blox::draw() {
+  cam.begin();
   /** Initialiez a function pointer */
   void (*rota)(float*, bool);
   /** Assign the modulate function to the pointer */
@@ -68,59 +72,13 @@ void Blox::draw() {
         //cout << i / 2 << "%" << width / 2 << " = " << col_color
           //<< " " << j / 2 << "%" << width / 2 << " = " << row_color << endl;
 
-        *(colorPixels + iterator) = (unsigned char) (55);
+        *(colorPixels + iterator) = (unsigned char) (i * j);
         *(colorPixels + iterator + 1) = (unsigned char) (0);
         *(colorPixels + iterator + 2) = (unsigned char) (0);
       }
     }
 
     tex.allocate(width, width, GL_RGB);
-    //*(*(colorPixels + (int) width) + (int) width) = (unsigned char) 255;
-    //*(*(colorPixels + (int) width / 2) + (int) width / 2) = (unsigned char) 255;
-    //*(*(colorPixels + (int) width / 3) + (int) width / 3) = (unsigned char) 255;
-    //cout << "for width: " << (int) (pow(width, 2) + width * 3 + 3) << endl;
-    //for (int i = 1; i <= width; i++) {
-      //for (int j = 1; j <= width * modu; j++) {
-        //*(colorPixels + ((j - 1) * (int) width + (i - 1)) * 3) =
-          //(unsigned char) (0);
-        //*(colorPixels + ((j - 1) * (int) width + (i - 1)) * 3 + 1) =
-          //(unsigned char) (0);
-        //*(colorPixels + ((j - 1) * (int) width + (i - 1)) * 3 + 2) =
-          //(unsigned char) (tan(j * i));
-      //}
-    //}
-    //for (int i = 0; i < width; i++) {
-      //for (int j = 0; j < width * modu; j++) {
-        //*(colorPixels + (j * (int) width + i) * 3) =
-          //(unsigned char) (pow(i, j));
-        //*(colorPixels + (j * (int) width + i) * 3 + 1) =
-          //(unsigned char) (pow(j, j));
-        //*(colorPixels + (j * (int) width + i) * 3 + 2) =
-          //(unsigned char) (pow(i, i));
-      //}
-    //}
-    //for (int i = 0; i < width; i++) {
-      //for (int j = 0; j < width * modu; j++) {
-        //*(colorPixels + (j * (int) width + i) * 3) =
-          //(unsigned char) ((j + 1) * (i + 1));
-        //*(colorPixels + (j * (int) width + i) * 3 + 1) =
-          //(unsigned char) ((j + 2) * (i + 2));
-        //*(colorPixels + (j * (int) width + i) * 3 + 2) =
-          //(unsigned char) ((j + 3) * (i + 3));
-      //}
-    //}
-    //for (int i = 0; i < width; i++) {
-      //random_grey = (i % 3 == 0) ? rand() % 255 : random_grey;
-      //for (int j = 0; j < width * modu; j++) {
-        //*(colorPixels + (j * (int) width + i) * 3) =
-          //(unsigned char) random_grey;
-        //*(colorPixels + (j * (int) width + i) * 3 + 1) =
-          //(unsigned char) random_grey;
-        //*(colorPixels + (j * (int) width + i) * 3 + 2) =
-          //(unsigned char) random_grey;
-      //}
-    //}
-
     tex.loadData(colorPixels, width, width, GL_RGB);
 
     ofTranslate(50, 0, 0);
@@ -135,5 +93,18 @@ void Blox::draw() {
     ofPopMatrix();
 
   }
-  //free((void *) colorPixels);
+  cam.end();
+}
+
+void Blox::keyPressed(int key) {
+  switch(key) {
+    case 'o':
+      dist += 10;
+      cam.setDistance(dist);
+      break;
+    case 'l':
+      dist -= 10;
+      cam.setDistance(dist);
+      break;
+  }
 }
