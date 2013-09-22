@@ -40,7 +40,6 @@ void ViMuc::keyPressed(int key) {
     default:
       break;
   }
-
   scene->keyPressed(key);
 }
 
