@@ -12,4 +12,5 @@ class Blox : public Scene {
 
   private:
     ofTexture tex;
+    unsigned char *colorPixels;
 };

@@ -24,6 +24,7 @@ void rotate(float* vals, bool right) {
 }
 
 void Blox::setup() {
+  setBands(10);
   ofEnableNormalizedTexCoords();
 }
 
@@ -33,11 +34,13 @@ void Blox::draw() {
   /** Assign the modulate function to the pointer */
   rota = &rotate;
 
+  float *fftSmoothed = getFFTSmooth();
+
   float *vals = new float[3];
 
-  vals[0] = getFFTSmooth()[0];
-  vals[1] = getFFTSmooth()[3];
-  vals[2] = getFFTSmooth()[7];
+  vals[0] = fftSmoothed[0];
+  vals[1] = fftSmoothed[sizeof(fftSmoothed) / sizeof(*fftSmoothed) / 2];
+  vals[2] = fftSmoothed[sizeof(fftSmoothed) / sizeof(*fftSmoothed) - 1];
 
   /** Pass the modu function pointer to the customModulatedRotation method */
   rotator.customModulatedRotation(rota, vals);
@@ -46,13 +49,10 @@ void Blox::draw() {
   float width = (float) 45;
   ofTranslate(-(getBands() * width) / 2, 0, 0);
 
-  //vector<unsigned char> *colorPixelsVector = new vector<unsigned char>();
-
   for (int i = 0; i < getBands(); i++) {
-    float modu = 2 * getFFTSmooth()[i] * pow((i + 1.0), 6 / 4);
+    float modu = 2 * fftSmoothed[i] * pow((i + 1.0), 6/4);
 
-    unsigned char *colorPixels =
-      (unsigned char*) malloc(sizeof(*colorPixels) *
+  colorPixels = (unsigned char*) malloc(sizeof(*colorPixels) *
           (pow(width, 2) * (modu + 1) * 3 + 3));
 
     tex.allocate(width, modu * width, GL_RGB);
@@ -120,5 +120,7 @@ void Blox::draw() {
     tex.unbind();
 
     ofPopMatrix();
+
+    free((void *) colorPixels);
   }
 }
