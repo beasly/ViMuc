@@ -16,6 +16,9 @@ class Terrain : public Scene{
 private:
   typedef Scene super;
   
+  
+  int lowest_height;
+  int highest_height;
   int move_row;
   int move_count;
   int frames;

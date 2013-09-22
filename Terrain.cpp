@@ -10,16 +10,16 @@ Terrain::Terrain() : super() {
   gridSurfaceSetup();
   super::setBands(meshResolution);
   //setPeeks();
-  //debug_vertex();
+  //debug_vertex();	
   
   //set_sinus_heights();
   
   set_colors();
-  //set_vertical_color();
+  set_vertical_color();
   //update_colors();
   //Light
   //light.setPointLight();
-  //getheight();
+  
   //test_heights();
   //make_rainbow();
   //draw_rainbow();
@@ -110,9 +110,9 @@ void Terrain::draw() {
   ofPushStyle();
   ofTranslate(-(meshResolution / 2), 0, -(meshResolution / 2));
   
-  ofSetColor(202, 216, 216);
-  gridMesh.draw();  
-  ofSetColor(0, 0, 0);
+  //ofSetColor(202, 216, 216);
+  //gridMesh.draw();  
+  ofSetColor(255, 255, 255);
   gridMesh.drawWireframe();
   
   
@@ -139,7 +139,7 @@ void Terrain::update() {
   if (frames > 1000)
     frames = 0;
   
-  
+  getheight();
   
 }
 
@@ -214,23 +214,26 @@ void Terrain::test() {
   
   int range = 0;
   float modulation = 0;
+  float * fft_values = getFFTSmooth(); 
+  
   
   for (int i = 0; i < getBands(); i++) {
     
-    modulation = 2 * getFFTSmooth()[i] * pow((i + 1.0), 6/4);
-    
+    modulation = 2 * fft_values[i] * pow((i + 1.0), 6/4);
+    //cout << "FFT-Values " << i << "     " << fft_values[i] << endl;
     //cout << "Modulation is " << modulation << endl;
     
     for (int j = range; j < (peeks.size() / getBands()) + range; j++) { 
       {
-        
+        //cout << "Vector: " << j << " Modulation: " << modulation * 2 << endl;
         vector = gridMesh.getVertex(peeks[j]);
         vector.y = 2 * modulation;
+     //   cout << "Height: " << vector.y << endl;
         gridMesh.setVertex(peeks[j], vector);
         
         
         
-          cout << "Vector: " << j << " Modulation: " << modulation * 2 << endl;
+       
         
         
         
@@ -294,17 +297,15 @@ void Terrain::update_colors() {
 }
 
 void Terrain::getheight() {
-  int lowest = 0;
-  int highest = 0;
   for (int i = 0; i < gridMesh.getNumVertices(); i++) {
     ofVec3f v = gridMesh.getVertex(i);
-    if (v.y < lowest)
-      lowest = v.y;
-    if (v.y > highest)
-      highest = v.y;
+    if (v.y < lowest_height)
+      lowest_height = v.y;
+    if (v.y > highest_height)
+      highest_height = v.y;
   }
-  cout << "Highest Y is " << highest << endl;
-  cout << "Lowest Y is " << lowest << endl;
+  cout << "Highest Y is " << highest_height << endl;
+  cout << "Lowest Y is " << lowest_height << endl;
   
 }
 
