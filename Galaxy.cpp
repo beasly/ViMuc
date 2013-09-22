@@ -18,14 +18,14 @@ void Galaxy::setup() {
     char *path = (char *) malloc(sizeof(*path) * 128);
     ofVec3f position;
     if (i == 0) {
-      snprintf(path, sizeof(path) * 128, "./textures/texture0.tif");
+      snprintf(path, sizeof(*path) * 128, "./textures/texture0.tif");
       texture->loadImage(path);
       planet->setTexture(texture);
       planet->setMovable(false);
       planet->setRadius(sunRadius);
       position.set(0, 0, 0);
     } else {
-      snprintf(path, sizeof(path) * 128, "./textures/texture%d.tif", i % 9 + 1);
+      snprintf(path, sizeof(*path) * 128, "./textures/texture%d.tif", i % 9 + 1);
       texture->loadImage(path);
       planet->setTexture(texture);
       planet->setMovable(true);
@@ -34,38 +34,38 @@ void Galaxy::setup() {
       planet->setRotationSpeed((float) rand() / RAND_MAX + 0.01);
       planet->setPositionOfSun(galaxyList.at(0)->getPosition());
       bool validOrbit = false;
-      while (!validOrbit) {
-        position.set(ofRandom(500), ofRandom(-10, 10), ofRandom(500));
-        planet->setPosition(position);
-        planet->calculateRadiusOfOrbit();
-        if (planet->getRadiusOfOrbit() > planet->getRadius() + 1.5 * sunRadius) {
-          if (galaxyList.size() == 1) {
-            validOrbit = true;
-          } else {
-            int testedPlanets = 1;
-            for (size_t indexOfPlanet = 1; indexOfPlanet < galaxyList.size();
-                 indexOfPlanet++) {
-              Planet *otherPlanet = galaxyList.at(indexOfPlanet);
-              float positiveDangerZone = otherPlanet->getRadiusOfOrbit() +
-                otherPlanet->getRadius();
-              float negativeDangerZone = otherPlanet->getRadiusOfOrbit() -
-                otherPlanet->getRadius();
-              float positiveZone = planet->getRadiusOfOrbit() +
-                planet->getRadius();
-              float negativZone = planet->getRadiusOfOrbit() -
-                planet->getRadius();
-              if (positiveDangerZone > negativZone &&
-                negativeDangerZone < positiveZone) {
-                indexOfPlanet = galaxyList.size();
-              }
-              testedPlanets++;
-            }
-            if (testedPlanets == galaxyList.size()) {
-              validOrbit = true;
-            }
-          }
-        }
-      }
+      position.set(ofRandom(500), ofRandom(-10, 10), ofRandom(500));
+      planet->setPosition(position);
+      //while (!validOrbit) {
+        //planet->calculateRadiusOfOrbit();
+        //if (planet->getRadiusOfOrbit() > planet->getRadius() + 1.5 * sunRadius) {
+          //if (galaxyList.size() == 1) {
+            //validOrbit = true;
+          //} else {
+            //int testedPlanets = 1;
+            //for (size_t indexOfPlanet = 1; indexOfPlanet < galaxyList.size();
+                 //indexOfPlanet++) {
+              //Planet *otherPlanet = galaxyList.at(indexOfPlanet);
+              //float positiveDangerZone = otherPlanet->getRadiusOfOrbit() +
+                //otherPlanet->getRadius();
+              //float negativeDangerZone = otherPlanet->getRadiusOfOrbit() -
+                //otherPlanet->getRadius();
+              //float positiveZone = planet->getRadiusOfOrbit() +
+                //planet->getRadius();
+              //float negativZone = planet->getRadiusOfOrbit() -
+                //planet->getRadius();
+              //if (positiveDangerZone > negativZone &&
+                //negativeDangerZone < positiveZone) {
+                //indexOfPlanet = galaxyList.size();
+              //}
+              //testedPlanets++;
+            //}
+            //if (testedPlanets == galaxyList.size()) {
+              //validOrbit = true;
+            //}
+          //}
+        //}
+      //}
     }
     galaxyList.push_back(planet);
   }
