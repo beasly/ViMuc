@@ -46,37 +46,37 @@ void ViMuc::keyPressed(int key) {
       break;
   }
 
-  scene->keyPressed(int key);
+  scene->keyPressed(key);
 }
 
 void ViMuc::keyReleased(int key) {
-  scene->keyReleased(int key);
+  scene->keyReleased(key);
 }
 
 void ViMuc::mouseMoved(int x, int y) {
-  scene->mouseMoved(int key);
+  scene->mouseMoved(x, y);
 }
 
 void ViMuc::mouseDragged(int x, int y, int button) {
-  scene->mouseDragged(int x, int y, int button);
+  scene->mouseDragged(x, y, button);
 }
 
 void ViMuc::mousePressed(int x, int y, int button) {
-  scene->mousePressed(int x, int y, int button);
+  scene->mousePressed(x, y, button);
 }
 
 void ViMuc::mouseReleased(int x, int y, int button) {
-  scene->mouseReleased(int x, int y, int button);
+  scene->mouseReleased(x, y, button);
 }
 
 void ViMuc::windowResized(int w, int h) {
-  scene->windowResized(int w, int h);
+  scene->windowResized(w, h);
 }
 
 void ViMuc::gotMessage(ofMessage msg) {
-  scene->gotMessage(ofMessage msg);
+  scene->gotMessage(msg);
 }
 
 void ViMuc::dragEvent(ofDragInfo dragInfo) {
-  scene->dragEvent(ofDragInfo dragInfo);
+  scene->dragEvent(dragInfo);
 }
