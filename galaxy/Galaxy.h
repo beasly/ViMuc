@@ -1,10 +1,11 @@
 #ifndef __Galaxy_H_
 #define __Galaxy_H_
-#define sunRadius (40)
+#define sunRadius (50)
 
 #include <iostream>
 #include <vector>
 #include "Planet.h"
+#include "ofxSkyBox.h"
 #include "Scene.h"
 
 using namespace std;
@@ -28,7 +29,7 @@ class Galaxy : public Scene {
   int planetAmount;
   vector<Planet *> galaxyList;
   bool playing;
-//  ofxSkyBox skyBox;
+  ofxSkyBox skyBox;
 
 };
 
