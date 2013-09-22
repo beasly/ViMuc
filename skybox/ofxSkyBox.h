@@ -13,7 +13,6 @@
 
 #include "ofMain.h"
 #include "ofxCubeMap.h"
-//#include "ofShader"
 
 class ofxSkyBox {
 

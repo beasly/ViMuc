@@ -1,6 +1,7 @@
 #ifndef __Galaxy_H_
 #define __Galaxy_H_
-#define sunRadius (50)
+#define sunRadius (60)
+#define dangerZone (5)
 
 #include <iostream>
 #include <vector>
@@ -13,23 +14,19 @@ using namespace std;
 class Galaxy : public Scene {
   public:
   Galaxy();
-
   void update();
-
   void draw();
-
   void setup();
-
   int irand(int min, int max) const;
-
   void keyPressed(int key);
 
 
   private:
-  int planetAmount;
   vector<Planet *> galaxyList;
   bool playing;
+  ofEasyCam cam;
   ofxSkyBox skyBox;
+  typedef Scene super;
 
 };
 
