@@ -15,7 +15,7 @@ ofxSkyBox::ofxSkyBox() {
 }
 
 void ofxSkyBox::load() {
-  cubeshader.load("skybox/skybox");
+  cubeshader.load("space/skybox");
   cubeMap.loadImages("space/Skybox360 002 Right +x.png", "space/Skybox360 002 Up +y.png", "space/Skybox360 002 Front +z.png", "space/Skybox360 002 Left -x.png",
     "space/Skybox360 002 Down -y.png", "space/Skybox360 002 Back -z.png");
 

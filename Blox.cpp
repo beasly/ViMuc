@@ -3,8 +3,7 @@
 
 #include "Blox.h"
 
-Blox::Blox() {
-}
+Blox::Blox() {}
 
 /**
  * This is the function I want to use as modulator for the rotation of my
@@ -24,11 +23,11 @@ void modulate(float *vals, bool right) {
 
 void Blox::draw() {
   /** Initialiez a function pointer */
-  void (*modu)(float *, bool);
+  void (*modu)(float*, bool);
   /** Assign the modulate function to the pointer */
   modu = &modulate;
 
-  float *vals = new float [3];
+  float *vals = new float[3];
 
   vals[0] = getFFTSmooth()[0];
   vals[1] = getFFTSmooth()[3];

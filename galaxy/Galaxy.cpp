@@ -1,43 +1,44 @@
 #include "Galaxy.h"
 
 Galaxy::Galaxy() {
-  Scene::Scene();
-  setBands(16);
-  planetAmount = getBands();
+  setBands(15);
 }
-
 
 void Galaxy::setup() {
   skyBox.load();
+  cam.setDistance(800);
+  cam.enableMouseInput();
 
-  ofBackground(255, 255, 255);
-  ofSetFrameRate(60); // if vertical sync is off, we can go a bit fast... this caps the framerate at 60fps.
   ofEnableNormalizedTexCoords();
 
-  for (int i = 0; i < planetAmount + 1; i++) {
+  for (int i = 0; i < getBands() + 1; i++) {
+
     Planet *planet = new Planet;
-    planet->setMovable(false);
-    planet->setRadius(sunRadius);
     ofImage *texture = new ofImage;
     char *path = (char *) malloc(sizeof(*path) * 128);
-    snprintf(path, sizeof(path) * 128, "./textures/texture%d.tif", i % 10);
-    texture->loadImage(path);
-    planet->setTexture(texture);
     ofVec3f position;
     if (i == 0) {
+      snprintf(path, sizeof(path) * 128, "./textures/texture0.tif");
+      texture->loadImage(path);
+      planet->setTexture(texture);
+      planet->setMovable(false);
+      planet->setRadius(sunRadius);
       position.set(0, 0, 0);
     } else {
+      snprintf(path, sizeof(path) * 128, "./textures/texture%d.tif", i % 9 + 1);
+      texture->loadImage(path);
+      planet->setTexture(texture);
       planet->setMovable(true);
-      planet->setRadius(irand(5, 15));
+      planet->setRadius(irand(10, 20));
       planet->setRotationAngle(ofRandom(360));
       planet->setRotationSpeed((float) rand() / RAND_MAX + 0.01);
       planet->setPositionOfSun(galaxyList.at(0)->getPosition());
       bool validOrbit = false;
       while (!validOrbit) {
-        position.set(ofRandom(400), ofRandom(-10, 10), ofRandom(400));
+        position.set(ofRandom(500), ofRandom(-10, 10), ofRandom(500));
         planet->setPosition(position);
         planet->calculateRadiusOfOrbit();
-        if (planet->getRadiusOfOrbit() > planet->getRadius() + sunRadius) {
+        if (planet->getRadiusOfOrbit() > planet->getRadius() + 1.5 * sunRadius) {
           if (galaxyList.size() == 1) {
             validOrbit = true;
           } else {
@@ -72,13 +73,15 @@ void Galaxy::setup() {
 
 
 void Galaxy::update() {
-  Scene::update();
+  super::update();
   for (size_t i = 1; i < galaxyList.size(); i++) {
     Planet *planet = galaxyList.at(i);
     if (planet->isMovable() && playing) {
-      float modu = getFFTSmooth()[i - 1];
-      cout << modu << " " << i << " " << getFFTSmooth()[i - 1] << endl;
-      galaxyList.at(i)->update(modu * 2);
+      float modu = getFFTSmooth()[i - 1] * 3;
+      if (modu < 0.25) {
+        modu = 0.25;
+      }
+      galaxyList.at(i)->update(modu);
     } else {
       galaxyList.at(i)->update(0.25);
     }
@@ -86,15 +89,27 @@ void Galaxy::update() {
 }
 
 void Galaxy::draw() {
-  ofBuffer();
+  cam.begin();
+
+  float *vals = new float [3];
+  vals[0] = getFFTSmooth()[0];
+  vals[1] = getFFTSmooth()[3];
+  vals[2] = getFFTSmooth()[7];
+  ofPushMatrix();
+  rotator.modulatedRotation(vals[0] / 3.5, vals[1] / 3.5, vals[2] / 3.5);
+  rotator.rotate();
   skyBox.draw();
+  ofPopMatrix();
+
   for (size_t i = 0; i < galaxyList.size(); i++) {
     Planet *planet = galaxyList.at(i);
     ofPushMatrix();
     ofRotate(planet->getRotationAngle(), 0.0f, 1.0f, 0.0f);
+    ofFill();
     planet->draw();
+    ofPopMatrix();
   }
-  ofPopMatrix();
+  cam.end();
 }
 
 
