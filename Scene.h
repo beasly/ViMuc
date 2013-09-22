@@ -60,10 +60,12 @@ class Scene : public ofBaseApp {
     float* getFFTSmooth() const;
     float* getFFTPlain() const;
     void setBands(int bands);
+    void setFilter(float filter);
     int getBands() const;
 
   private:
     int nBands;
+    float filter;
 
     float *fftSmooth;
     float *fftPlain;

@@ -12,7 +12,8 @@
  * fft values.
  */
 Scene::Scene() {
-  this->nBands = 10;
+  nBands = 10;
+  filter = 1;
 
   fftPlain = new float[128];
   fftSmooth = new float[128];
@@ -27,7 +28,9 @@ void Scene::setup() {}
 void Scene::update() {
   ofSoundUpdate();
 
-  float *val = ofSoundGetSpectrum(nBands);
+  int filteredNBands = (int) (filter * nBands);
+
+  float *val = ofSoundGetSpectrum(filteredNBands);
 
   for (int i = 0; i < nBands; i++) {
     fftPlain[i] = val[i];
@@ -36,25 +39,25 @@ void Scene::update() {
   }
 }
 
-void Scene::draw() { }
+void Scene::draw() {}
 
-void Scene::keyPressed(int key) { }
+void Scene::keyPressed(int key) {}
 
-void Scene::keyReleased(int key) { }
+void Scene::keyReleased(int key) {}
 
-void Scene::mouseMoved(int x, int y) { }
+void Scene::mouseMoved(int x, int y) {}
 
-void Scene::mouseDragged(int x, int y, int button) { }
+void Scene::mouseDragged(int x, int y, int button) {}
 
-void Scene::mousePressed(int x, int y, int button) { }
+void Scene::mousePressed(int x, int y, int button) {}
 
-void Scene::mouseReleased(int x, int y, int button) { }
+void Scene::mouseReleased(int x, int y, int button) {}
 
-void Scene::windowResized(int w, int h) { }
+void Scene::windowResized(int w, int h) {}
 
-void Scene::gotMessage(ofMessage msg) { }
+void Scene::gotMessage(ofMessage msg) {}
 
-void Scene::dragEvent(ofDragInfo dragInfo) { }
+void Scene::dragEvent(ofDragInfo dragInfo) {}
 
 float* Scene::getFFTSmooth() const {
   return fftSmooth;
@@ -68,6 +71,12 @@ void Scene::setBands(int bands) {
   this->nBands = bands;
 }
 
+void Scene::setFilter(float filter) {
+  this->filter = filter;
+}
+
 int Scene::getBands() const {
   return this->nBands;
 }
+
+
