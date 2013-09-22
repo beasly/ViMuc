@@ -52,20 +52,33 @@ void Blox::draw() {
   for (int i = 0; i < getBands(); i++) {
     float modu = 2 * fftSmoothed[i] * pow((i + 1.0), 6/4);
 
-  colorPixels = (unsigned char*) malloc(sizeof(*colorPixels) *
-          (pow(width, 2) * (modu + 1) * 3 + 3));
+    colorPixels = (unsigned char*) malloc(sizeof(*colorPixels) *
+       (int) (width * width + width) * 3 + 2);
 
-    tex.allocate(width, modu * width, GL_RGB);
-    for (int i = 1; i <= width; i++) {
-      for (int j = 1; j <= width * modu; j++) {
-        *(colorPixels + ((j - 1) * (int) width + (i - 1)) * 3) =
-          (unsigned char) (i * i);
-        *(colorPixels + ((j - 1) * (int) width + (i - 1)) * 3 + 1) =
-          (unsigned char) (0);
-        *(colorPixels + ((j - 1) * (int) width + (i - 1)) * 3 + 2) =
-          (unsigned char) (0);
+    for (int i = 0; i <= width; i++) {
+      for (int j = 0; j <= width; j++) {
+        if (i == 0 && j == 0) {
+          //cout << endl << endl << endl;
+        }
+        int iterator = (j * (int) width + i) * 3;
+
+        int col_color = (i / 2) % (int) width / 2;
+        int row_color = (j / 2) % (int) width / 2;
+
+        //cout << i / 2 << "%" << width / 2 << " = " << col_color
+          //<< " " << j / 2 << "%" << width / 2 << " = " << row_color << endl;
+
+        *(colorPixels + iterator) = (unsigned char) (55);
+        *(colorPixels + iterator + 1) = (unsigned char) (0);
+        *(colorPixels + iterator + 2) = (unsigned char) (0);
       }
     }
+
+    tex.allocate(width, width, GL_RGB);
+    //*(*(colorPixels + (int) width) + (int) width) = (unsigned char) 255;
+    //*(*(colorPixels + (int) width / 2) + (int) width / 2) = (unsigned char) 255;
+    //*(*(colorPixels + (int) width / 3) + (int) width / 3) = (unsigned char) 255;
+    //cout << "for width: " << (int) (pow(width, 2) + width * 3 + 3) << endl;
     //for (int i = 1; i <= width; i++) {
       //for (int j = 1; j <= width * modu; j++) {
         //*(colorPixels + ((j - 1) * (int) width + (i - 1)) * 3) =
@@ -108,7 +121,7 @@ void Blox::draw() {
       //}
     //}
 
-    tex.loadData(colorPixels, width, modu * width, GL_RGB);
+    tex.loadData(colorPixels, width, width, GL_RGB);
 
     ofTranslate(50, 0, 0);
 
@@ -121,6 +134,6 @@ void Blox::draw() {
 
     ofPopMatrix();
 
-    free((void *) colorPixels);
   }
+  //free((void *) colorPixels);
 }
