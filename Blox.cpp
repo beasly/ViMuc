@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 
+#include <vector>
+
 #include "Blox.h"
 
 Blox::Blox() {}
@@ -13,7 +15,7 @@ Blox::Blox() {}
  * referenced and called is a method of the Rotator class.
  * This behaviour is dangerous, so don't do stupid things with it.
  */
-void modulate(float *vals, bool right) {
+void rotate(float* vals, bool right) {
   vals[0] += !(right) ? vals[0] * 1 : -(vals[0] * 1);
   vals[1] += !(right) ? vals[1] * 2 : -(vals[1] * 2);
   vals[2] += !(right) ? vals[2] * 4 : -(vals[2] * 4);
@@ -21,11 +23,15 @@ void modulate(float *vals, bool right) {
   right = vals[0] < 0.25 ? !right : right;
 }
 
+void Blox::setup() {
+  ofEnableNormalizedTexCoords();
+}
+
 void Blox::draw() {
   /** Initialiez a function pointer */
-  void (*modu)(float*, bool);
+  void (*rota)(float*, bool);
   /** Assign the modulate function to the pointer */
-  modu = &modulate;
+  rota = &rotate;
 
   float *vals = new float[3];
 
@@ -34,39 +40,85 @@ void Blox::draw() {
   vals[2] = getFFTSmooth()[7];
 
   /** Pass the modu function pointer to the customModulatedRotation method */
-  rotator.customModulatedRotation(modu, vals);
+  rotator.customModulatedRotation(rota, vals);
   rotator.rotate();
 
   float width = (float) 45;
   ofTranslate(-(getBands() * width) / 2, 0, 0);
 
+  //vector<unsigned char> *colorPixelsVector = new vector<unsigned char>();
+
   for (int i = 0; i < getBands(); i++) {
     float modu = 2 * getFFTSmooth()[i] * pow((i + 1.0), 6 / 4);
 
-    tex.allocate(width, modu, GL_RGB);
-    colorPixels = new unsigned char [(int)((width * modu) + 1) * 3];
-    for (int i = 0; i < width; i++) {
-      for (int j = 0; j < modu; j++) {
-        colorPixels[(j * (int)(width) + i) * 3 + 0] = i;
-        colorPixels[(j * (int)(width) + i) * 3 + 1] = j;
-        colorPixels[(j * (int)(width) + i) * 3 + 2] = 0;
+    unsigned char *colorPixels =
+      (unsigned char*) malloc(sizeof(*colorPixels) *
+          (pow(width, 2) * (modu + 1) * 3 + 3));
+
+    tex.allocate(width, modu * width, GL_RGB);
+    for (int i = 1; i <= width; i++) {
+      for (int j = 1; j <= width * modu; j++) {
+        *(colorPixels + ((j - 1) * (int) width + (i - 1)) * 3) =
+          (unsigned char) (i * i);
+        *(colorPixels + ((j - 1) * (int) width + (i - 1)) * 3 + 1) =
+          (unsigned char) (0);
+        *(colorPixels + ((j - 1) * (int) width + (i - 1)) * 3 + 2) =
+          (unsigned char) (0);
       }
     }
-    tex.loadData(colorPixels, width, modu, GL_RGB);
+    //for (int i = 1; i <= width; i++) {
+      //for (int j = 1; j <= width * modu; j++) {
+        //*(colorPixels + ((j - 1) * (int) width + (i - 1)) * 3) =
+          //(unsigned char) (0);
+        //*(colorPixels + ((j - 1) * (int) width + (i - 1)) * 3 + 1) =
+          //(unsigned char) (0);
+        //*(colorPixels + ((j - 1) * (int) width + (i - 1)) * 3 + 2) =
+          //(unsigned char) (tan(j * i));
+      //}
+    //}
+    //for (int i = 0; i < width; i++) {
+      //for (int j = 0; j < width * modu; j++) {
+        //*(colorPixels + (j * (int) width + i) * 3) =
+          //(unsigned char) (pow(i, j));
+        //*(colorPixels + (j * (int) width + i) * 3 + 1) =
+          //(unsigned char) (pow(j, j));
+        //*(colorPixels + (j * (int) width + i) * 3 + 2) =
+          //(unsigned char) (pow(i, i));
+      //}
+    //}
+    //for (int i = 0; i < width; i++) {
+      //for (int j = 0; j < width * modu; j++) {
+        //*(colorPixels + (j * (int) width + i) * 3) =
+          //(unsigned char) ((j + 1) * (i + 1));
+        //*(colorPixels + (j * (int) width + i) * 3 + 1) =
+          //(unsigned char) ((j + 2) * (i + 2));
+        //*(colorPixels + (j * (int) width + i) * 3 + 2) =
+          //(unsigned char) ((j + 3) * (i + 3));
+      //}
+    //}
+    //for (int i = 0; i < width; i++) {
+      //random_grey = (i % 3 == 0) ? rand() % 255 : random_grey;
+      //for (int j = 0; j < width * modu; j++) {
+        //*(colorPixels + (j * (int) width + i) * 3) =
+          //(unsigned char) random_grey;
+        //*(colorPixels + (j * (int) width + i) * 3 + 1) =
+          //(unsigned char) random_grey;
+        //*(colorPixels + (j * (int) width + i) * 3 + 2) =
+          //(unsigned char) random_grey;
+      //}
+    //}
+
+    tex.loadData(colorPixels, width, modu * width, GL_RGB);
 
     ofTranslate(50, 0, 0);
-    //ofSphere(100 * modu);
 
     ofPushMatrix();
-    //ofSetColor(255, 0, 0);
-    //ofFill();
-    tex.bind();
+
     ofScale(0.6, modu, 1);
+    tex.bind();
     ofBox(width);
     tex.unbind();
-    ofSetColor(0);
-    ofNoFill();
-    ofBox(width);
+
     ofPopMatrix();
   }
 }

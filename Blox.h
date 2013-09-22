@@ -8,8 +8,8 @@ class Blox : public Scene {
     Blox();
 
     void draw();
+    void setup();
 
   private:
     ofTexture tex;
-    unsigned char *colorPixels;
 };
