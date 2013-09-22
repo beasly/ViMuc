@@ -15,7 +15,7 @@ void ViMuc::setup() {
 //  scene = new Blox();
   scene = new Galaxy();
 
-  dist = 600;
+  dist = 800;
   cam.setDistance(dist);
   cam.enableMouseInput();
 
