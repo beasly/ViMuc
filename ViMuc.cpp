@@ -13,7 +13,8 @@ void ViMuc::setup() {
 
   scene = new Blox();
 
-  cam.setDistance(600);
+  dist = 600;
+  cam.setDistance(dist);
   cam.enableMouseInput();
 
   srand(time(NULL));
@@ -43,6 +44,14 @@ void ViMuc::keyPressed(int key) {
       break;
     case 'w':
       test.stop();
+      break;
+    case 'o':
+      dist += 10;
+      cam.setDistance(dist);
+      break;
+    case 'l':
+      dist -= 10;
+      cam.setDistance(dist);
       break;
   }
 }
