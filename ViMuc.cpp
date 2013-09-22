@@ -12,8 +12,7 @@ void ViMuc::setup() {
   glEnable(GL_DEPTH_TEST);
   ofEnableSmoothing();
 
-//  scene = new Blox();
-  scene = new Galaxy();
+  scene = new Blox();
 
   srand(time(NULL));
 

@@ -1,17 +1,9 @@
-//
-// Created by kevingoy on 19.06.13.
-//
-// To change the template use AppCode | Preferences | File Templates.
-//
-
-
-
 #ifndef __Galaxy_H_
 #define __Galaxy_H_
+#define sunRadius (40)
 
 #include <iostream>
 #include <vector>
-#include "ofBaseApp.h"
 #include "Planet.h"
 #include "Scene.h"
 
@@ -22,17 +14,22 @@ class Galaxy : public Scene {
   Galaxy();
 
   void update();
+
   void draw();
+
   void setup();
+
   int irand(int min, int max) const;
-  void updatePhysics(time_t animationTime);
-  void updateForces(double deltaTime);
-  void updatePosition(double deltaTime);
+
+  void keyPressed(int key);
+
 
   private:
   int planetAmount;
-  vector<Planet> galaxyList;
-  time_t lastPhyicsAnimationTime;
+  vector<Planet *> galaxyList;
+  bool playing;
+//  ofxSkyBox skyBox;
+
 };
 
 
