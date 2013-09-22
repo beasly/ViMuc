@@ -1,8 +1,11 @@
-#ifndef __Particle_H_
-#define __Particle_H_
+#ifndef __Planet_H_
+#define __Planet_H_
 
 #include <iostream>
+#include "ofBaseTypes.h"
+#include "ofBaseApp.h"
 #include "ofVec3f.h"
+#include "ofMain.h"
 
 class Planet {
   public:
@@ -21,23 +24,24 @@ class Planet {
   void setRotationSpeed(float rotationSpeed);
   float getRotationAngle();
   void setRotationAngle(float rotationAngle);
-  void addRotationAngle();
-  void setPlanetIndex(int planetIndex);
-  int getPlanetIndex();
-  void setGalaxyIndex(int galaxyIndex);
-  int getGalaxyIndex();
+  void addRotationAngle(float modu);
+  float getRadiusOfOrbit();
+  void calculateRadiusOfOrbit();
+  void setTexture(ofImage *texture);
+  void update(float modu);
+  void draw();
 
   private:
   ofVec3f speed;
   ofVec3f position;
   int radius;
   ofVec3f positionOfSun;
+  float radiusOfOrbit;
   bool movable;
   float rotationAngle;
   float rotationSpeed;
-  int planetIndex;
-  int galaxyIndex;
+  ofImage *tex;
 };
 
 
-#endif //__Particle_H_
+#endif //__Planet_H_

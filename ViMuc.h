@@ -2,6 +2,8 @@
 
 #include "ofMain.h"
 #include "Scene.h"
+#include "ofBaseApp.h"
+#include "ofEvents.h"
 
 class ViMuc : public ofBaseApp {
   public:

@@ -9,31 +9,34 @@ void Planet::setSpeed(ofVec3f speed) {
   this->speed = speed;
 }
 
+float Planet::getRadiusOfOrbit() {
+  return radiusOfOrbit;
+}
+
 bool Planet::isMovable() {
   return movable;
 }
 
 bool Planet::operator !=(Planet otherPlanet) const {
   if (speed.x != otherPlanet.getSpeed().x || speed.y != otherPlanet.getSpeed().y || speed.z
-     != otherPlanet.getSpeed().z) {
+    != otherPlanet.getSpeed().z) {
     return true;
   } else if (position.x != otherPlanet.getPosition().x || position.y != otherPlanet.getPosition().y ||
     position.z != otherPlanet.getPosition().z) {
     return true;
   } else if (radius != otherPlanet.getRadius()) {
     return true;
-  } else{
+  } else {
     return false;
   }
 }
-
 
 void Planet::setPosition(ofVec3f position) {
   this->position = position;
 }
 
-void Planet::addRotationAngle() {
-  rotationAngle += rotationSpeed*0.25;
+void Planet::addRotationAngle(float modu) {
+  rotationAngle += rotationSpeed * modu;
   if (rotationAngle > 360) {
     rotationAngle -= 360;
   }
@@ -47,20 +50,12 @@ float Planet::getRotationAngle() {
   return rotationAngle;
 }
 
-int Planet::getGalaxyIndex() {
-  return galaxyIndex;
-}
-
-int Planet::getPlanetIndex() {
-  return planetIndex;
+void Planet::setTexture(ofImage *texture) {
+  tex = texture;
 }
 
 ofVec3f Planet::getPositionOfSun() {
   return positionOfSun;
-}
-
-void Planet::setPlanetIndex(int planetIndex) {
-  this->planetIndex = planetIndex;
 }
 
 Planet::Planet() {
@@ -78,8 +73,14 @@ ofVec3f Planet::getPosition() {
   return position;
 }
 
-void Planet::setGalaxyIndex(int galaxyIndex) {
-  this->galaxyIndex = galaxyIndex;
+void Planet::update(float modu) {
+  if (isMovable()) {
+    addRotationAngle(modu);
+  }
+}
+
+void Planet::calculateRadiusOfOrbit() {
+  radiusOfOrbit = sqrt(pow(position.x, 2) + pow(position.z, 2));
 }
 
 void Planet::setRotationAngle(float rotationAngle) {
@@ -92,4 +93,13 @@ void Planet::setRotationSpeed(float rotationSpeed) {
 
 void Planet::setMovable(bool movable) {
   this->movable = movable;
+}
+
+void Planet::draw() {
+  tex->bind();
+  ofSphere(position.x, position.y,
+    position.z,
+    radius);
+  tex->unbind();
+
 }
