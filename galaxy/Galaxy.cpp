@@ -2,13 +2,13 @@
 
 Galaxy::Galaxy() {
   Scene::Scene();
-  setBands(14);
+  setBands(16);
   planetAmount = getBands();
 }
 
 
 void Galaxy::setup() {
-//  skyBox.load();
+  skyBox.load();
 
   ofBackground(255, 255, 255);
   ofSetFrameRate(60); // if vertical sync is off, we can go a bit fast... this caps the framerate at 60fps.
@@ -20,7 +20,6 @@ void Galaxy::setup() {
     planet->setRadius(sunRadius);
     ofImage *texture = new ofImage;
     char *path = (char *) malloc(sizeof(*path) * 128);
-//    snprintf(path, sizeof(path) * 128, "./textures/texture%d.tif", i);
     snprintf(path, sizeof(path) * 128, "./textures/texture%d.tif", i % 10);
     texture->loadImage(path);
     planet->setTexture(texture);
@@ -35,10 +34,7 @@ void Galaxy::setup() {
       planet->setPositionOfSun(galaxyList.at(0)->getPosition());
       bool validOrbit = false;
       while (!validOrbit) {
-        float x = ofRandom(400);
-        float z = ofRandom(400);
-        position.set(x, ofRandom(-10, 10),
-          z);
+        position.set(ofRandom(400), ofRandom(-10, 10), ofRandom(400));
         planet->setPosition(position);
         planet->calculateRadiusOfOrbit();
         if (planet->getRadiusOfOrbit() > planet->getRadius() + sunRadius) {
@@ -72,7 +68,6 @@ void Galaxy::setup() {
     }
     galaxyList.push_back(planet);
   }
-
 }
 
 
@@ -92,7 +87,7 @@ void Galaxy::update() {
 
 void Galaxy::draw() {
   ofBuffer();
-
+  skyBox.draw();
   for (size_t i = 0; i < galaxyList.size(); i++) {
     Planet *planet = galaxyList.at(i);
     ofPushMatrix();
