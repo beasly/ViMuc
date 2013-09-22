@@ -2,18 +2,32 @@
 
 #include "ofMain.h"
 #include <algorithm>
+
 #define _USE_MATH_DEFINES
 #include <math.h>
 #include "Scene.h"
+
+
+using namespace std;
 
 class Terrain : public Scene{
 
 
 private:
+  typedef Scene super;
+  
+  int move_row;
+  int move_count;
+  int frames;
+  
+  
+  
   //int nBands;
   //float *fftSmooth;
   ofVboMesh gridMesh;
   ofLight light;
+  
+  int framecounter;
 
 
 
@@ -32,7 +46,9 @@ private:
 
  float highest;
  float lowest;
-
+  
+  ofColor color_array[200];
+  void update_colors();
 
 public:
 
@@ -40,6 +56,7 @@ public:
   Terrain();
   //void update();
   void draw();
+  void update();
   void setBands(int bands);
   void gridSurfaceSetup();
   void set_sinus_heights();
@@ -53,6 +70,14 @@ public:
    void debug_fft();
    void show_fft();
 
+  ofColor HSL2RGB(double h, double s, double l);
+  void HSLtoRGB_Subfunction(unsigned int& c, const float& temp1, const float& temp2, const float& temp3);
+  void set_vertical_color();
+  
+  vector<ofColor> rainbow_vector;
+  void make_rainbow();
+  
+  void move_peeks();
 
 
 };
