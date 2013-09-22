@@ -54,7 +54,6 @@ void ViMuc::keyPressed(int key) {
       cam.setDistance(dist);
       break;
   }
-
   scene->keyPressed(key);
 }
 
