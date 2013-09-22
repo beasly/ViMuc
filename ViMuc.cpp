@@ -54,20 +54,38 @@ void ViMuc::keyPressed(int key) {
       cam.setDistance(dist);
       break;
   }
+
+  scene->keyPressed(int key);
 }
 
-void ViMuc::keyReleased(int key) { }
+void ViMuc::keyReleased(int key) {
+  scene->keyReleased(int key);
+}
 
-void ViMuc::mouseMoved(int x, int y) { }
+void ViMuc::mouseMoved(int x, int y) {
+  scene->mouseMoved(int key);
+}
 
-void ViMuc::mouseDragged(int x, int y, int button) { }
+void ViMuc::mouseDragged(int x, int y, int button) {
+  scene->mouseDragged(int x, int y, int button);
+}
 
-void ViMuc::mousePressed(int x, int y, int button) { }
+void ViMuc::mousePressed(int x, int y, int button) {
+  scene->mousePressed(int x, int y, int button);
+}
 
-void ViMuc::mouseReleased(int x, int y, int button) { }
+void ViMuc::mouseReleased(int x, int y, int button) {
+  scene->mouseReleased(int x, int y, int button);
+}
 
-void ViMuc::windowResized(int w, int h) { }
+void ViMuc::windowResized(int w, int h) {
+  scene->windowResized(int w, int h);
+}
 
-void ViMuc::gotMessage(ofMessage msg) { }
+void ViMuc::gotMessage(ofMessage msg) {
+  scene->gotMessage(ofMessage msg);
+}
 
-void ViMuc::dragEvent(ofDragInfo dragInfo) { }
+void ViMuc::dragEvent(ofDragInfo dragInfo) {
+  scene->dragEvent(ofDragInfo dragInfo);
+}
