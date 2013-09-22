@@ -81,6 +81,10 @@ public:
   void make_rainbow();
   
   void move_peeks();
+  void smoothTerrain();
+  
+  ofVec3f get_bezier(float t, ofVec3f point_a, ofVec3f point_b, ofVec3f point_c, ofVec3f point_d);
+  void set_horizontal_color();
 
 
 };

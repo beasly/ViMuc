@@ -6,16 +6,29 @@ Terrain::Terrain() : super() {
   
   move_count = 0;
   frames = 0;
-  meshResolution = 128;
+  meshResolution = 64;
+  lowest_height = 0;
+  highest_height = 0;
+  
   gridSurfaceSetup();
   super::setBands(meshResolution);
-  //setPeeks();
-  //debug_vertex();	
+  setFilter(1.25f);
   
-  //set_sinus_heights();
   
+  setPeeks();
   set_colors();
-  set_vertical_color();
+  
+  //set_vertical_color();
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
   //update_colors();
   //Light
   //light.setPointLight();
@@ -24,8 +37,10 @@ Terrain::Terrain() : super() {
   //make_rainbow();
   //draw_rainbow();
   
-  setPeeks();
+ //setPeeks();
+  //debug_vertex();	
   
+  //set_sinus_heights();
   
   
   
@@ -58,6 +73,11 @@ void Terrain::gridSurfaceSetup() {
     
     gridMesh.addTriangle( meshResolution+i, meshResolution+i+1,              i+1 );
 	}
+  
+  ofFloatColor c = color_array[0];
+  for (int j = 0; j < meshResolution * meshResolution; j++) {
+    gridMesh.addColor(c);
+  }
   
   /*
    
@@ -106,14 +126,24 @@ void Terrain::draw() {
   
   
   //  update_colors();
-  test();
+    test();
+  
   ofPushStyle();
+
+
   ofTranslate(-(meshResolution / 2), 0, -(meshResolution / 2));
+    //gridMesh.draw();
+
+   //ofTranslate(0, 1, 0);
+  
+  //ofSetColor(255, 255, 255);
+  gridMesh.drawWireframe();
+  ofPopStyle();
+  //ofPopStyle();
   
   //ofSetColor(202, 216, 216);
-  //gridMesh.draw();  
-  ofSetColor(255, 255, 255);
-  gridMesh.drawWireframe();
+    
+  
   
   
   
@@ -123,19 +153,20 @@ void Terrain::draw() {
   //show_fft();
   //debug_fft();
   //module_terrain();
-  ofPopStyle();
+  
 }
 
 
 void Terrain::update() {
   super::update();
-  
+ 
   if (frames % 3 == 0) { 
     move_peeks();
     
   }
-  frames++;
   
+  
+  frames++;
   if (frames > 1000)
     frames = 0;
   
@@ -203,8 +234,18 @@ void Terrain::move_peeks() {
   for (int i = (meshResolution * meshResolution) - 1; i >= 0; i--) {
     ofVec3f v_follower = gridMesh.getVertex(i);
     ofVec3f v_origin = gridMesh.getVertex(i - meshResolution);
+    
+    //Vertikal
+    ofFloatColor c_follower = gridMesh.getColor(i);
+    ofFloatColor c_origin = gridMesh.getColor(i - meshResolution);
+    
+    
     v_follower.y = v_origin.y;
     gridMesh.setVertex(i, v_follower);
+    
+    // Vertikal
+    c_follower = c_origin;
+    gridMesh.setColor(i, c_follower);
   }
 }
 
@@ -215,20 +256,21 @@ void Terrain::test() {
   int range = 0;
   float modulation = 0;
   float * fft_values = getFFTSmooth(); 
-  
+  float * fft_plain = getFFTPlain();
   
   for (int i = 0; i < getBands(); i++) {
     
     modulation = 2 * fft_values[i] * pow((i + 1.0), 6/4);
-    //cout << "FFT-Values " << i << "     " << fft_values[i] << endl;
+    //modulation = meshResolution * fft_values[i] * pow((i + 1.0); 
     //cout << "Modulation is " << modulation << endl;
     
     for (int j = range; j < (peeks.size() / getBands()) + range; j++) { 
       {
         //cout << "Vector: " << j << " Modulation: " << modulation * 2 << endl;
+        
         vector = gridMesh.getVertex(peeks[j]);
-        vector.y = 2 * modulation;
-     //   cout << "Height: " << vector.y << endl;
+        vector.y = (modulation > meshResolution / 2 ? meshResolution / 2 : 2 * modulation);
+        //cout << "Height: " << vector.y << endl;
         gridMesh.setVertex(peeks[j], vector);
         
         
@@ -241,12 +283,9 @@ void Terrain::test() {
     }
     
     range+=(peeks.size() / getBands());
-    
+    set_horizontal_color();
   }
-  
-  
-  
-  
+  //smoothTerrain();
   
   
 }
@@ -354,12 +393,6 @@ void Terrain::show_fft() {
   }
   
 }
-/*
- void Terrain::normalize_heights() {
- 
- }
- 
- */
 
 void Terrain::make_rainbow() {
   for (double i = 0; i < 1; i += 1 / meshResolution) {
@@ -470,5 +503,46 @@ void Terrain::HSLtoRGB_Subfunction(unsigned int& c, const float& temp1, const fl
 	return;
 }
 
+void Terrain::smoothTerrain() { 
+  int round_check = 0;
+  // Vertikal
+  for (int i = 0; i < peeks.size() - 6; i++) {
+    
+    ofVec3f point_a = gridMesh.getVertex(i);
+    ofVec3f point_b = gridMesh.getVertex(i+1);
+    ofVec3f point_c = gridMesh.getVertex(i+2);
+    ofVec3f point_d = gridMesh.getVertex(i+3);
+    //gridMesh.setVertex(get_bezier(point_a, point_b, point_c, point_d);
+  }
+
+}
+
+/*
+ofVec3f Terrain::get_bezier(float t, ofVec3f point_a, ofVec3f point_b, ofVec3f point_c, ofVec3f point_d) { 
+  float u = 1 – t;
+  float tt = t*t;
+  float uu = u*u;
+  float uuu = uu * u;
+  float ttt = tt * t;
+  
+  ofVec3f p = uuu * point_a; //first term
+  p += 3 * uu * t * point_b; //second term
+  p += 3 * u * tt * point_c; //third term
+  p += ttt * point_d; //fourth term
+  
+  return p;
+}
+ 
+ */
+
+void Terrain::set_horizontal_color() { 
+  for (int i = 0; i < peeks.size(); i++) {
+    ofVec3f v = gridMesh.getVertex(i);
+    ofFloatColor c = color_array[(int) v.y];
+    gridMesh.setColor(i, c);
+  }
+
+  
+}
 
 
