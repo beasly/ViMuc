@@ -29,69 +29,53 @@ void Blox::setup() {
   dist = 800;
   cam.setDistance(dist);
   cam.enableMouseInput();
+
+  createTexture();
 }
 
 void Blox::draw() {
   cam.begin();
-  /** Initialiez a function pointer */
+  /** Initializes a function pointer */
   void (*rota)(float*, bool);
   /** Assign the modulate function to the pointer */
   rota = &rotate;
 
-  float *fftSmoothed = getFFTSmooth();
+  int margin = BOX_WIDTH * 75 / 100;
+  int rows = 10;
 
+  //drawCoords(0, 0, 0);
+
+  float *fftSmoothed = getFFTSmooth();
   float *vals = new float[3];
 
   vals[0] = fftSmoothed[0];
   vals[1] = fftSmoothed[sizeof(fftSmoothed) / sizeof(*fftSmoothed) / 2];
   vals[2] = fftSmoothed[sizeof(fftSmoothed) / sizeof(*fftSmoothed) - 1];
 
-  /** Pass the modu function pointer to the customModulatedRotation method */
+  modu_history.push_back(fftSmoothed);
+
+  /* Pass the modu function pointer to the customModulatedRotation method */
   rotator.customModulatedRotation(rota, vals);
   rotator.rotate();
 
-  float width = (float) 45;
-  ofTranslate(-(getBands() * width) / 2, 0, 0);
-
-  for (int i = 0; i < getBands(); i++) {
-    float modu = 2 * fftSmoothed[i] * pow((i + 1.0), 6/4);
-
-    colorPixels = (unsigned char*) malloc(sizeof(*colorPixels) *
-       (int) (width * width + width) * 3 + 2);
-
-    for (int i = 0; i <= width; i++) {
-      for (int j = 0; j <= width; j++) {
-        if (i == 0 && j == 0) {
-          //cout << endl << endl << endl;
-        }
-        int iterator = (j * (int) width + i) * 3;
-
-        int col_color = (i / 2) % (int) width / 2;
-        int row_color = (j / 2) % (int) width / 2;
-
-        //cout << i / 2 << "%" << width / 2 << " = " << col_color
-          //<< " " << j / 2 << "%" << width / 2 << " = " << row_color << endl;
-
-        *(colorPixels + iterator) = (unsigned char) (i * j);
-        *(colorPixels + iterator + 1) = (unsigned char) (0);
-        *(colorPixels + iterator + 2) = (unsigned char) (0);
-      }
-    }
-
-    tex.allocate(width, width, GL_RGB);
-    tex.loadData(colorPixels, width, width, GL_RGB);
-
-    ofTranslate(50, 0, 0);
-
+  ofTranslate(-((getBands() * margin + margin) / 2), 0,
+      -(rows * (margin) + margin));
+  for (int j = 0; j < rows; j++) {
     ofPushMatrix();
+    for (int i = 0; i < getBands(); i++) {
+      float modu = 2 * fftSmoothed[i] * pow((i + 1.0), 6/4);
 
-    ofScale(0.6, modu, 1);
-    tex.bind();
-    ofBox(width);
-    tex.unbind();
-
+      ofTranslate(margin, 0, 0);
+      ofPushMatrix();
+        ofScale(0.6, modu, 1);
+        tex.bind();
+        ofBox(BOX_WIDTH);
+        tex.unbind();
+      ofPopMatrix();
+    }
     ofPopMatrix();
-
+    ofTranslate(0, 0, margin * 2);
+    //ofTranslate( 0, -(getBands() * (BOX_WIDTH)), 0);
   }
   cam.end();
 }
@@ -107,4 +91,52 @@ void Blox::keyPressed(int key) {
       cam.setDistance(dist);
       break;
   }
+}
+
+void Blox::drawCoords(int x, int y, int z) {
+  ofPushMatrix();
+    ofFill();
+    ofTranslate(x, y, z);
+
+    ofPushMatrix();
+      ofSetColor(255, 0, 0);
+      ofScale(10000, 1, 1);
+      ofBox(1);
+    ofPopMatrix();
+
+    ofPushMatrix();
+      ofSetColor(0, 255, 0);
+      ofScale(1, 10000, 1);
+      ofBox(1);
+    ofPopMatrix();
+
+    ofPushMatrix();
+      ofSetColor(0, 0, 255);
+      ofScale(1, 1, 10000);
+      ofBox(1);
+    ofPopMatrix();
+
+    ofNoFill();
+  ofPopMatrix();
+}
+
+void Blox::createTexture() {
+    colorPixels = (unsigned char*) malloc(sizeof(*colorPixels) *
+       (int) (BOX_WIDTH * BOX_WIDTH + BOX_WIDTH) * 3 + 2);
+
+    for (int i = 0; i < BOX_WIDTH; i++) {
+      for (int j = 0; j < BOX_WIDTH; j++) {
+        int position = (j * (int) BOX_WIDTH + i) * 3;
+        int colColor = pow(i - BOX_WIDTH / 2, 2);
+        int rowColor = pow(j - BOX_WIDTH / 2, 2);
+        int bigger = colColor > rowColor ? colColor : rowColor;
+
+        *(colorPixels + position) = (unsigned char) (0);
+        *(colorPixels + position + 1) = (unsigned char) (0);
+        *(colorPixels + position + 2) = (unsigned char) (sin(bigger) * 100);
+      }
+    }
+
+    tex.allocate(BOX_WIDTH, BOX_WIDTH, GL_RGB);
+    tex.loadData(colorPixels, BOX_WIDTH, BOX_WIDTH, GL_RGB);
 }
