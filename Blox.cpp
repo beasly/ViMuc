@@ -24,17 +24,27 @@ void rotate(float* vals, bool right) {
 }
 
 void Blox::setup() {
-  setBands(10);
   ofEnableNormalizedTexCoords();
+  glEnable(GL_DEPTH_TEST);
+  ofSetSmoothLighting(true);
+
+  setBands(10);
   dist = 800;
+
   cam.setDistance(dist);
   cam.enableMouseInput();
+
+  pointLight.setDiffuseColor(ofColor(0.f, 255.f, 0.f));
+  pointLight.setSpecularColor(ofColor(255.f, 255.f, 255.f));
+  //pointLight.setPosition(0, 0, 300);
+
+  material.setShininess(64);
+  material.setSpecularColor(ofColor(255.f, 255.f, 255.f));
 
   createTexture();
 }
 
 void Blox::draw() {
-  cam.begin();
   /** Initializes a function pointer */
   void (*rota)(float*, bool);
   /** Assign the modulate function to the pointer */
@@ -48,22 +58,41 @@ void Blox::draw() {
   float *fftSmoothed = getFFTSmooth();
   float *vals = new float[3];
 
+  /** DEBUG: CHANGE ME BEFORE COMMIT */
+  for (int i = 0; i < getBands(); i++) {
+    printf("%2.8f ", fftSmoothed[i]);
+  }
+  puts("\n");
+
   vals[0] = fftSmoothed[0];
   vals[1] = fftSmoothed[sizeof(fftSmoothed) / sizeof(*fftSmoothed) / 2];
   vals[2] = fftSmoothed[sizeof(fftSmoothed) / sizeof(*fftSmoothed) - 1];
 
   modu_history.push_back(fftSmoothed);
 
+  ofEnableLighting();
+  pointLight.enable();
+
+  cam.begin();
+
+  /** Draw sky sphere */
+  ofPushMatrix();
+    ofNoFill();
+    ofSphere(2500);
+    ofFill();
+  ofPopMatrix();
+
   /* Pass the modu function pointer to the customModulatedRotation method */
   rotator.customModulatedRotation(rota, vals);
   rotator.rotate();
 
+  material.begin();
   ofTranslate(-((getBands() * margin + margin) / 2), 0,
-      -(rows * (margin) + margin));
+      -(rows * margin + margin));
   for (int j = 0; j < rows; j++) {
     ofPushMatrix();
     for (int i = 0; i < getBands(); i++) {
-      float modu = 2 * fftSmoothed[i] * pow((i + 1.0), 6/4);
+      float modu = 2 * fftSmoothed[i] * pow((i + 1.0), 6 / 4);
 
       ofTranslate(margin, 0, 0);
       ofPushMatrix();
@@ -77,7 +106,12 @@ void Blox::draw() {
     ofTranslate(0, 0, margin * 2);
     //ofTranslate( 0, -(getBands() * (BOX_WIDTH)), 0);
   }
+  material.end();
+
+  ofDisableLighting();
+
   cam.end();
+
 }
 
 void Blox::keyPressed(int key) {
@@ -93,9 +127,8 @@ void Blox::keyPressed(int key) {
   }
 }
 
-void Blox::drawCoords(int x, int y, int z) {
+void Blox::drawCoords(int x, int y, int z) const {
   ofPushMatrix();
-    ofFill();
     ofTranslate(x, y, z);
 
     ofPushMatrix();
@@ -116,7 +149,6 @@ void Blox::drawCoords(int x, int y, int z) {
       ofBox(1);
     ofPopMatrix();
 
-    ofNoFill();
   ofPopMatrix();
 }
 
@@ -133,10 +165,14 @@ void Blox::createTexture() {
 
         *(colorPixels + position) = (unsigned char) (0);
         *(colorPixels + position + 1) = (unsigned char) (0);
-        *(colorPixels + position + 2) = (unsigned char) (sin(bigger) * 100);
+        *(colorPixels + position + 2) = (unsigned char) (log(bigger) * 100);
       }
     }
 
     tex.allocate(BOX_WIDTH, BOX_WIDTH, GL_RGB);
     tex.loadData(colorPixels, BOX_WIDTH, BOX_WIDTH, GL_RGB);
+}
+
+void Blox::mouseMoved(int x, int y) {
+  //pointLight.setPosition(x, y, 900);
 }
