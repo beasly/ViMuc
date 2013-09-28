@@ -37,6 +37,7 @@ void Scene::update() {
     fftPlain[i] = val[i];
     fftSmooth[i] *= smoothingFactor;
     fftSmooth[i] = fftSmooth[i] < val[i] ? val[i] : fftSmooth[i];
+    fftSmooth[i] = fftSmooth[i] > 10 ? 0 : fftSmooth[i];
   }
 }
 
