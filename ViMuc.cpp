@@ -12,7 +12,7 @@ void ViMuc::setup() {
   glEnable(GL_DEPTH_TEST);
   ofEnableSmoothing();
 
-  scene = new Blox();
+  scene = new Galaxy();
 
   srand(time(NULL));
 
@@ -37,6 +37,14 @@ void ViMuc::keyPressed(int key) {
       break;
     case 'w':
       test.stop();
+      break;
+    case 'a':
+      scene = new Galaxy();
+      scene->setup();
+      break;
+    case 's':
+      scene = new Blox();
+      scene->setup();
       break;
     default:
       break;
