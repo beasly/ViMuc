@@ -24,19 +24,19 @@ void rotate(float* vals, bool right) {
 }
 
 void Blox::setup() {
-  ofEnableNormalizedTexCoords();
-  glEnable(GL_DEPTH_TEST);
-  ofSetSmoothLighting(true);
-
   setBands(10);
   dist = 800;
+
+  _texturize = &Blox::cosTex;
+  r = true;
+  g = true;
+  b = true;
 
   cam.setDistance(dist);
   cam.enableMouseInput();
 
   pointLight.setDiffuseColor(ofColor(0.f, 255.f, 0.f));
   pointLight.setSpecularColor(ofColor(255.f, 255.f, 255.f));
-  //pointLight.setPosition(0, 0, 300);
 
   material.setShininess(64);
   material.setSpecularColor(ofColor(255.f, 255.f, 255.f));
@@ -45,6 +45,9 @@ void Blox::setup() {
 }
 
 void Blox::draw() {
+  ofEnableNormalizedTexCoords();
+  glEnable(GL_DEPTH_TEST);
+
   /** Initializes a function pointer */
   void (*rota)(float*, bool);
   /** Assign the modulate function to the pointer */
@@ -53,25 +56,12 @@ void Blox::draw() {
   int margin = BOX_WIDTH * 75 / 100;
   int rows = 10;
 
-  //drawCoords(0, 0, 0);
-
   float *fftSmoothed = getFFTSmooth();
   float *vals = new float[3];
-
-  /** DEBUG: CHANGE ME BEFORE COMMIT */
-  for (int i = 0; i < getBands(); i++) {
-    printf("%2.8f ", fftSmoothed[i]);
-  }
-  puts("\n");
 
   vals[0] = fftSmoothed[0];
   vals[1] = fftSmoothed[sizeof(fftSmoothed) / sizeof(*fftSmoothed) / 2];
   vals[2] = fftSmoothed[sizeof(fftSmoothed) / sizeof(*fftSmoothed) - 1];
-
-  modu_history.push_back(fftSmoothed);
-
-  ofEnableLighting();
-  pointLight.enable();
 
   cam.begin();
 
@@ -104,25 +94,60 @@ void Blox::draw() {
     }
     ofPopMatrix();
     ofTranslate(0, 0, margin * 2);
-    //ofTranslate( 0, -(getBands() * (BOX_WIDTH)), 0);
   }
   material.end();
 
-  ofDisableLighting();
-
   cam.end();
 
+  ofDisableNormalizedTexCoords();
+  glDisable(GL_DEPTH_TEST);
 }
 
 void Blox::keyPressed(int key) {
-  switch(key) {
+  switch (key) {
     case 'o':
-      dist += 10;
+      dist += (dist >= 2500) ? 0 : 10;
       cam.setDistance(dist);
       break;
     case 'l':
       dist -= 10;
       cam.setDistance(dist);
+      break;
+    case 'z':
+      _texturize = &Blox::logTex;
+      createTexture();
+      break;
+    case 'x':
+      _texturize = &Blox::sinTex;
+      createTexture();
+      break;
+    case 'c':
+      _texturize = &Blox::cosTex;
+      createTexture();
+      break;
+    case 'v':
+      _texturize = &Blox::quadTex;
+      createTexture();
+      break;
+    case 'n':
+      _texturize = &Blox::expTex;
+      createTexture();
+      break;
+    case 'm':
+      _texturize = &Blox::sqrtTex;
+      createTexture();
+      break;
+    case 'r':
+      r = !r;
+      createTexture();
+      break;
+    case 'g':
+      g = !g;
+      createTexture();
+      break;
+    case 'b':
+      b = !b;
+      createTexture();
       break;
   }
 }
@@ -163,9 +188,12 @@ void Blox::createTexture() {
         int rowColor = pow(j - BOX_WIDTH / 2, 2);
         int bigger = colColor > rowColor ? colColor : rowColor;
 
-        *(colorPixels + position) = (unsigned char) (0);
-        *(colorPixels + position + 1) = (unsigned char) (0);
-        *(colorPixels + position + 2) = (unsigned char) (log(bigger) * 100);
+        *(colorPixels + position) =
+          (unsigned char) (r ? (this->*_texturize)(bigger) : 0);
+        *(colorPixels + position + 1) =
+          (unsigned char) (g ? (this->*_texturize)(bigger) : 0);
+        *(colorPixels + position + 2) =
+          (unsigned char) (b ? (this->*_texturize)(bigger) : 0);
       }
     }
 
@@ -173,6 +201,26 @@ void Blox::createTexture() {
     tex.loadData(colorPixels, BOX_WIDTH, BOX_WIDTH, GL_RGB);
 }
 
-void Blox::mouseMoved(int x, int y) {
-  //pointLight.setPosition(x, y, 900);
+float Blox::logTex(int n) {
+  return log(n) * BOX_WIDTH;
+}
+
+float Blox::sinTex(int n) {
+  return sin(n) * BOX_WIDTH;
+}
+
+float Blox::cosTex(int n) {
+  return acosh(n) * BOX_WIDTH;
+}
+
+float Blox::quadTex(int n) {
+  return n * n;
+}
+
+float Blox::expTex(int n) {
+  return pow(2, n) / BOX_WIDTH;
+}
+
+float Blox::sqrtTex(int n) {
+  return sqrt(n) * 10;
 }
