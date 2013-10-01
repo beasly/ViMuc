@@ -6,6 +6,7 @@
 #include "Scene.h"
 #include "Blox.h"
 #include "Galaxy.h"
+#include "Terrain.h"
 
 void ViMuc::setup() {
   ofSetVerticalSync(true);
@@ -44,6 +45,10 @@ void ViMuc::keyPressed(int key) {
       break;
     case 's':
       scene = new Blox();
+      scene->setup();
+      break;
+    case 'd':
+      scene = new Terrain();
       scene->setup();
       break;
     default:
