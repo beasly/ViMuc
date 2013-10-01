@@ -15,7 +15,7 @@ Blox::Blox() {}
  * This behaviour is dangerous, so don't do stupid things with it.
  */
 void rotate(float* vals, bool right) {
-  vals[0] += !(right) ? vals[0] * 1 : -(vals[0] * 1);
+  vals[0] += !(right) ? vals[0] * 3 : -(vals[0] * 3);
   vals[1] += !(right) ? vals[1] * 2 : -(vals[1] * 2);
   vals[2] += !(right) ? vals[2] * 4 : -(vals[2] * 4);
 
@@ -23,8 +23,13 @@ void rotate(float* vals, bool right) {
 }
 
 void Blox::setup() {
+  ofBackground(200, 200, 200);
+  ofSetFrameRate(60);
+
   setBands(10);
   dist = 800;
+
+  rows = 10;
 
   _texturize = &Blox::cosTex;
   r = true;
@@ -53,7 +58,6 @@ void Blox::draw() {
   rota = &rotate;
 
   int margin = BOX_WIDTH * 75 / 100;
-  int rows = 10;
 
   float *fftSmoothed = getFFTSmooth();
   float *vals = new float[3];
@@ -147,6 +151,12 @@ void Blox::keyPressed(int key) {
     case 'b':
       b = !b;
       createTexture();
+      break;
+    case '+':
+      rows += rows <= 50 ? 1 : 0;
+      break;
+    case '-':
+      rows -= rows > 0 ? 1 : 0;
       break;
   }
 }
