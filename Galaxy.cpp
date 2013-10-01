@@ -2,9 +2,11 @@
 
 Galaxy::Galaxy() {
   setBands(15);
+  setFilter(1.25);
 }
 
 void Galaxy::setup() {
+  skyBox.load();
   skyBox.load();
   cam.setPosition(0, 130, 760);
   cam.setTarget(ofVec3f(0, 0, 0));
@@ -12,16 +14,18 @@ void Galaxy::setup() {
 
   ofEnableNormalizedTexCoords();
 
-  for (int i = 0; i < getBands() + 1; i++) {
+  for (int i = 0; i <= getBands(); i++) {
 
     Planet *planet = new Planet;
     ofImage *texture = new ofImage;
     char *path = (char *) malloc(sizeof(*path) * 128);
     ofVec3f position;
+
     if (i == 0) {
       snprintf(path, sizeof(*path) * 128, "./textures/texture0.tif");
       texture->loadImage(path);
       planet->setTexture(texture);
+
       planet->setMovable(false);
       planet->setRadius(sunRadius);
       position.set(0, 0, 0);
@@ -29,14 +33,16 @@ void Galaxy::setup() {
       snprintf(path, sizeof(*path) * 128, "./textures/texture%d.tif", i % 9 + 1);
       texture->loadImage(path);
       planet->setTexture(texture);
+
       planet->setMovable(true);
       planet->setRadius(irand(10, 20));
       planet->setRotationAngle(ofRandom(360));
       planet->setRotationSpeed((float) rand() / RAND_MAX + 0.01);
       planet->setPositionOfSun(galaxyList.at(0)->getPosition());
-      position.set(ofRandom(500), ofRandom(-10, 10), ofRandom(500));
-      planet->setPosition(position);
+      position.set(ofRandom(60 + 40 * i, 80 + 40 * i), ofRandom(-10, 10), 0);//ofRandom(60 + 20 * i, 80 + 20 * i));
     }
+
+    planet->setPosition(position);
     galaxyList.push_back(planet);
   }
 }
@@ -97,9 +103,21 @@ void Galaxy::keyPressed(int key) {
     case 'w':
       playing = false;
       break;
+    case '0':
+      cam.setPosition(0, 130, 760);
+      cam.setTarget(ofVec3f(0, 0, 0));
+      break;
+    case '+':
+      if (cam.getPosition().z + 10 > 400) {
+        cam.setPosition(cam.getPosition().x, cam.getPosition().y, cam.getPosition().z - 10);
+      }
+      break;
+    case '-':
+      if (cam.getPosition().z - 10 < 790) {
+        cam.setPosition(cam.getPosition().x, cam.getPosition().y, cam.getPosition().z + 10);
+      }
+      break;
     default:
       break;
   }
 }
-
-
