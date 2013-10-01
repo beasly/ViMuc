@@ -1,7 +1,6 @@
 #include <stdlib.h>
-#include <stdio.h>
 
-#include <vector>
+#include <cmath>
 
 #include "Blox.h"
 
@@ -184,8 +183,8 @@ void Blox::createTexture() {
     for (int i = 0; i < BOX_WIDTH; i++) {
       for (int j = 0; j < BOX_WIDTH; j++) {
         int position = (j * (int) BOX_WIDTH + i) * 3;
-        int colColor = pow(i - BOX_WIDTH / 2, 2);
-        int rowColor = pow(j - BOX_WIDTH / 2, 2);
+        int colColor = pow((float) (i - BOX_WIDTH / 2), 2);
+        int rowColor = pow((float) (j - BOX_WIDTH / 2), 2);
         int bigger = colColor > rowColor ? colColor : rowColor;
 
         *(colorPixels + position) =
@@ -218,7 +217,7 @@ float Blox::quadTex(int n) {
 }
 
 float Blox::expTex(int n) {
-  return pow(2, n) / BOX_WIDTH;
+  return pow(2.0f, n) / BOX_WIDTH;
 }
 
 float Blox::sqrtTex(int n) {

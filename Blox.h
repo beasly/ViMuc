@@ -16,12 +16,12 @@ class Blox : public Scene {
   private:
     void createTexture();
     void drawCoords(int x, int y, int z) const;
-    float logTex(int);
-    float sinTex(int);
-    float cosTex(int);
-    float quadTex(int);
-    float expTex(int);
-    float sqrtTex(int);
+    float logTex(int n);
+    float sinTex(int n);
+    float cosTex(int n);
+    float quadTex(int n);
+    float expTex(int n);
+    float sqrtTex(int n);
 
     typedef float (Blox::*texturize)(int);
     texturize _texturize;
