@@ -2,6 +2,7 @@
 #include <stdio.h>
 
 #include <vector>
+#include <cmath>
 
 #include "Blox.h"
 
