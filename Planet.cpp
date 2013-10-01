@@ -97,9 +97,6 @@ void Planet::setMovable(bool movable) {
 
 void Planet::draw() {
   tex->bind();
-  ofSphere(position.x, position.y,
-    position.z,
-    radius);
+  ofSphere(position.x, position.y, position.z, radius);
   tex->unbind();
-
 }

@@ -1,7 +1,6 @@
 #ifndef __Galaxy_H_
 #define __Galaxy_H_
 #define sunRadius (60)
-#define dangerZone (5)
 
 #include <iostream>
 #include <vector>
