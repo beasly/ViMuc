@@ -2,33 +2,42 @@
 #include "ofMain.h"
 #include <math.h>
 
+Terrain::Terrain() {
 
-Terrain::Terrain() : super() {
-  
-  frames = 0;
-  meshResolution = 128;
-  dist = 100;
-  speed = 4;
-  set_colors();
-  gridSurfaceSetup();
-  setPeeks();
-  super::setBands(meshResolution);
-  setFilter(1.25f);
-  setSmoothingFactor(0.975f);
-  
 }
 
 void Terrain::setup() {
-  
- // super::setup(); 
-  //ofPushMatrix();
+  frames = 0;
+  meshResolution = 128;
+  dist = 300;
+  begin.set(18, 3, 194);
+  end.set(38, 172, 22);
+  indexLow = 0;
+  indexHigh = 0;
+  setColors(begin, end);
+  gridSurfaceSetup();
+  setPeeks();
+  setBands(meshResolution);
+  setFilter(1.25f);
+  setSmoothingFactor(0.975f);
+  cam.setDistance(dist);
+  cam.enableMouseInput();
   ofBackground(0, 0, 0);
-  //ofPopMatrix();
-  
 }
 
 void Terrain::gridSurfaceSetup() {
-
+  colorPalette[0] = ofColor(255, 0, 0);
+  colorPalette[1] = ofColor(255, 0, 171);
+  colorPalette[2] = ofColor(239, 0, 255);
+  colorPalette[3] = ofColor(51, 0, 255);
+  colorPalette[4] = ofColor(51, 0, 255);
+  colorPalette[5] = ofColor(0, 213, 255);
+  colorPalette[6] = ofColor(0, 255, 199);
+  colorPalette[7] = ofColor(17, 255, 0);
+  colorPalette[8] = ofColor(222, 255, 0);
+  colorPalette[9] = ofColor(222, 145, 0);
+  colorPalette[10] = ofColor(0, 0, 0);
+  
   ofFloatColor c = color_array[0];
   for (int j = 0; j < meshResolution * meshResolution; j++) {
     gridMesh.addColor(c);
@@ -52,7 +61,7 @@ void Terrain::gridSurfaceSetup() {
 }
 
 void Terrain::draw() {
-
+  
   cam.begin();
   ofPushMatrix();
   updateHeights();
@@ -63,29 +72,25 @@ void Terrain::draw() {
     gridMesh.draw();
   else
     gridMesh.drawWireframe();
-
+  
   ofPopMatrix();
-  cam.enableMouseInput();
   cam.end();
 }
 
 
 void Terrain::update() {
   super::update();
-// Speed rausnehmen
-//  cout << speed << endl;
-  if (speed < 2) {
-    speed = 2;
-  }
-// Rausnehmen
+  
   if (frames % 2 == 0) { 
-    move_peeks();
+    movePeeks();
   }
   
   frames++;
   if (frames > 1000)
-    frames = 0;
+    frames = 0; 
 }
+
+
 
 void Terrain::setPeeks() {
   int count = 0;
@@ -97,7 +102,7 @@ void Terrain::setPeeks() {
 }
 
 
-void Terrain::move_peeks() { 
+void Terrain::movePeeks() { 
   int count = 0;
   for (int i = (meshResolution * meshResolution) - 1; i >= 0; i--) {
     ofVec3f v_follower = gridMesh.getVertex(i);
@@ -134,14 +139,11 @@ void Terrain::updateHeights() {
       gridMesh.setVertex(peeks[j], vector);
     }
     range+=(peeks.size() / getBands());
-    set_horizontal_color();
+    setHorizontalColor();
   }
 }
 
-
-
-
-void Terrain::set_colors() {
+void Terrain::setColors(ofColor start, ofColor end) {
   
   int steps = meshResolution / 4;
   float n = 0;
@@ -150,16 +152,16 @@ void Terrain::set_colors() {
   for(int i = 1; i <= steps; i++ )
   {
     n = (float) i / (float) (steps-1);
-    r = (float) 18 * (1.0f-n) + (float) 38 * n;
-    g = (float) 3 * (1.0f-n) + (float) 172 * n;
-    b = (float) 194 * (1.0f-n) + (float) 22 * n;
+    r = (float) start.r  * (1.0f-n) + (float) end.r * n;
+    g = (float) start.g * (1.0f-n) + (float) end.g * n;
+    b = (float) start.b * (1.0f-n) + (float) end.b * n;
     ofColor t(r,g,b);
     color_array[i - 1] = t;
     
   }
 }
 
-void Terrain::set_horizontal_color() { 
+void Terrain::setHorizontalColor() { 
   
   for (int i = 0; i < peeks.size(); i++) {
     ofVec3f v = gridMesh.getVertex(i);
@@ -176,9 +178,7 @@ void Terrain::keyPressed(int key) {
       cam.setDistance(dist);
       break;
     case 'j':
-      cout << "Distance before" << dist << endl;
       dist -= 10;
-      cout << "Distance after" << dist << endl;
       cam.setDistance(dist);
       break;
     case 'h':
@@ -188,10 +188,27 @@ void Terrain::keyPressed(int key) {
       drawMode =  false;
       break;
     case 'z':
-      speed += 2;
+      indexLow += 1; 
+      switchLowerColor(indexLow);
       break;
     case 'i':
-      speed -= 2;
+      indexHigh += 1;
+      switchUpperColor(indexHigh);
       break;
   }
 }
+
+void Terrain::switchLowerColor(int i) {
+  if (i > 10)
+    indexLow = 0;
+  begin.set(colorPalette[i]); 
+  setColors(begin, end);
+}
+
+void Terrain::switchUpperColor(int i) {
+  if (i > 10)
+    indexHigh = 0;
+  end.set(colorPalette[i]); 
+  setColors(begin, end);
+}
+

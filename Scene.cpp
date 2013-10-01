@@ -82,10 +82,6 @@ void Scene::setSmoothingFactor(float _smoothingFactor) {
   smoothingFactor = _smoothingFactor;
 }
 
-void Scene::setFilter(float filter) {
-  this->filter = filter;
-}
-
 int Scene::getBands() const {
   return nBands;
 }

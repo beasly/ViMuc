@@ -15,10 +15,6 @@ void ViMuc::setup() {
 
   scene = new Galaxy();
 
-  dist = 600;
-  cam.setDistance(dist);
-  cam.enableMouseInput();
-
   srand(time(NULL));
 
   test.loadSound("skank.mp3");
@@ -49,6 +45,10 @@ void ViMuc::keyPressed(int key) {
       break;
     case 's':
       scene = new Blox();
+      scene->setup();
+      break;
+    case 'd':
+      scene = new Terrain();
       scene->setup();
       break;
     default:
