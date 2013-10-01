@@ -2,25 +2,30 @@
 
 Galaxy::Galaxy() {
   setBands(15);
+  setFilter(1.25);
 }
 
 void Galaxy::setup() {
   skyBox.load();
-  cam.setDistance(800);
+  skyBox.load();
+  cam.setPosition(0, 130, 760);
+  cam.setTarget(ofVec3f(0, 0, 0));
   cam.enableMouseInput();
 
   ofEnableNormalizedTexCoords();
 
-  for (int i = 0; i < getBands() + 1; i++) {
+  for (int i = 0; i <= getBands(); i++) {
 
     Planet *planet = new Planet;
     ofImage *texture = new ofImage;
     char *path = (char *) malloc(sizeof(*path) * 128);
     ofVec3f position;
+
     if (i == 0) {
       snprintf(path, sizeof(*path) * 128, "./textures/texture0.tif");
       texture->loadImage(path);
       planet->setTexture(texture);
+
       planet->setMovable(false);
       planet->setRadius(sunRadius);
       position.set(0, 0, 0);
@@ -28,45 +33,16 @@ void Galaxy::setup() {
       snprintf(path, sizeof(*path) * 128, "./textures/texture%d.tif", i % 9 + 1);
       texture->loadImage(path);
       planet->setTexture(texture);
+
       planet->setMovable(true);
       planet->setRadius(irand(10, 20));
       planet->setRotationAngle(ofRandom(360));
       planet->setRotationSpeed((float) rand() / RAND_MAX + 0.01);
       planet->setPositionOfSun(galaxyList.at(0)->getPosition());
-      bool validOrbit = false;
-      position.set(ofRandom(500), ofRandom(-10, 10), ofRandom(500));
-      planet->setPosition(position);
-      //while (!validOrbit) {
-        //planet->calculateRadiusOfOrbit();
-        //if (planet->getRadiusOfOrbit() > planet->getRadius() + 1.5 * sunRadius) {
-          //if (galaxyList.size() == 1) {
-            //validOrbit = true;
-          //} else {
-            //int testedPlanets = 1;
-            //for (size_t indexOfPlanet = 1; indexOfPlanet < galaxyList.size();
-                 //indexOfPlanet++) {
-              //Planet *otherPlanet = galaxyList.at(indexOfPlanet);
-              //float positiveDangerZone = otherPlanet->getRadiusOfOrbit() +
-                //otherPlanet->getRadius();
-              //float negativeDangerZone = otherPlanet->getRadiusOfOrbit() -
-                //otherPlanet->getRadius();
-              //float positiveZone = planet->getRadiusOfOrbit() +
-                //planet->getRadius();
-              //float negativZone = planet->getRadiusOfOrbit() -
-                //planet->getRadius();
-              //if (positiveDangerZone > negativZone &&
-                //negativeDangerZone < positiveZone) {
-                //indexOfPlanet = galaxyList.size();
-              //}
-              //testedPlanets++;
-            //}
-            //if (testedPlanets == galaxyList.size()) {
-              //validOrbit = true;
-            //}
-          //}
-        //}
-      //}
+      position.set(ofRandom(60 + 40 * i, 80 + 40 * i), ofRandom(-10, 10), 0);
     }
+
+    planet->setPosition(position);
     galaxyList.push_back(planet);
   }
 }
@@ -104,9 +80,11 @@ void Galaxy::draw() {
   for (size_t i = 0; i < galaxyList.size(); i++) {
     Planet *planet = galaxyList.at(i);
     ofPushMatrix();
+    glEnable(GL_DEPTH_TEST);
     ofRotate(planet->getRotationAngle(), 0.0f, 1.0f, 0.0f);
     ofFill();
     planet->draw();
+    glDisable(GL_DEPTH_TEST);
     ofPopMatrix();
   }
   cam.end();
@@ -125,9 +103,21 @@ void Galaxy::keyPressed(int key) {
     case 'w':
       playing = false;
       break;
+    case '0':
+      cam.setPosition(0, 130, 760);
+      cam.setTarget(ofVec3f(0, 0, 0));
+      break;
+    case '+':
+      if (cam.getPosition().z + 10 > 400) {
+        cam.setPosition(cam.getPosition().x, cam.getPosition().y, cam.getPosition().z - 10);
+      }
+      break;
+    case '-':
+      if (cam.getPosition().z - 10 < 790) {
+        cam.setPosition(cam.getPosition().x, cam.getPosition().y, cam.getPosition().z + 10);
+      }
+      break;
     default:
       break;
   }
 }
-
-
