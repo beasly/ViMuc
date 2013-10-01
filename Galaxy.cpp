@@ -6,7 +6,8 @@ Galaxy::Galaxy() {
 
 void Galaxy::setup() {
   skyBox.load();
-  cam.setDistance(800);
+  cam.setPosition(0, 130, 760);
+  cam.setTarget(ofVec3f(0, 0, 0));
   cam.enableMouseInput();
 
   ofEnableNormalizedTexCoords();
@@ -33,39 +34,8 @@ void Galaxy::setup() {
       planet->setRotationAngle(ofRandom(360));
       planet->setRotationSpeed((float) rand() / RAND_MAX + 0.01);
       planet->setPositionOfSun(galaxyList.at(0)->getPosition());
-      bool validOrbit = false;
       position.set(ofRandom(500), ofRandom(-10, 10), ofRandom(500));
       planet->setPosition(position);
-      //while (!validOrbit) {
-        //planet->calculateRadiusOfOrbit();
-        //if (planet->getRadiusOfOrbit() > planet->getRadius() + 1.5 * sunRadius) {
-          //if (galaxyList.size() == 1) {
-            //validOrbit = true;
-          //} else {
-            //int testedPlanets = 1;
-            //for (size_t indexOfPlanet = 1; indexOfPlanet < galaxyList.size();
-                 //indexOfPlanet++) {
-              //Planet *otherPlanet = galaxyList.at(indexOfPlanet);
-              //float positiveDangerZone = otherPlanet->getRadiusOfOrbit() +
-                //otherPlanet->getRadius();
-              //float negativeDangerZone = otherPlanet->getRadiusOfOrbit() -
-                //otherPlanet->getRadius();
-              //float positiveZone = planet->getRadiusOfOrbit() +
-                //planet->getRadius();
-              //float negativZone = planet->getRadiusOfOrbit() -
-                //planet->getRadius();
-              //if (positiveDangerZone > negativZone &&
-                //negativeDangerZone < positiveZone) {
-                //indexOfPlanet = galaxyList.size();
-              //}
-              //testedPlanets++;
-            //}
-            //if (testedPlanets == galaxyList.size()) {
-              //validOrbit = true;
-            //}
-          //}
-        //}
-      //}
     }
     galaxyList.push_back(planet);
   }
@@ -104,9 +74,11 @@ void Galaxy::draw() {
   for (size_t i = 0; i < galaxyList.size(); i++) {
     Planet *planet = galaxyList.at(i);
     ofPushMatrix();
+    glEnable(GL_DEPTH_TEST);
     ofRotate(planet->getRotationAngle(), 0.0f, 1.0f, 0.0f);
     ofFill();
     planet->draw();
+    glDisable(GL_DEPTH_TEST);
     ofPopMatrix();
   }
   cam.end();
