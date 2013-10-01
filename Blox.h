@@ -30,6 +30,7 @@ class Blox : public Scene {
     int dist;
     ofTexture tex;
     unsigned char *colorPixels;
+    int rows;
 
     /** Texturize flags */
     bool r, g, b;
