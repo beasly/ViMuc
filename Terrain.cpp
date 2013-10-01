@@ -2,9 +2,7 @@
 #include "ofMain.h"
 #include <math.h>
 
-Terrain::Terrain() {
-
-}
+Terrain::Terrain() {}
 
 void Terrain::setup() {
   frames = 0;
@@ -45,7 +43,6 @@ void Terrain::gridSurfaceSetup() {
   
   for (int row = 1; row <= meshResolution; row++) {
     for (int column = 1; column <= meshResolution; column++) {
-      
       gridMesh.addVertex(ofPoint(row * 2, 0.0f, column  * 2));
     }
   }
@@ -61,17 +58,17 @@ void Terrain::gridSurfaceSetup() {
 }
 
 void Terrain::draw() {
-  
   cam.begin();
   ofPushMatrix();
   updateHeights();
   ofRotateY(-90);
   ofTranslate(-(meshResolution ), -20, -(meshResolution ));
   
-  if (drawMode)
+  if (drawMode) {
     gridMesh.draw();
-  else
+  } else {
     gridMesh.drawWireframe();
+  }
   
   ofPopMatrix();
   cam.end();
@@ -86,11 +83,11 @@ void Terrain::update() {
   }
   
   frames++;
-  if (frames > 1000)
-    frames = 0; 
+  if (frames > 1000) {
+    frames = 0;
+  }
+     
 }
-
-
 
 void Terrain::setPeeks() {
   int count = 0;
@@ -108,7 +105,7 @@ void Terrain::movePeeks() {
     ofVec3f v_follower = gridMesh.getVertex(i);
     ofVec3f v_origin = gridMesh.getVertex(i - meshResolution);
     
-    //Vertikal
+    //Vertical
     ofFloatColor c_follower = gridMesh.getColor(i);
     ofFloatColor c_origin = gridMesh.getColor(i - meshResolution);
     
@@ -119,7 +116,6 @@ void Terrain::movePeeks() {
     // Set Color and Vertex
     gridMesh.setVertex(i, v_follower);
     gridMesh.setColor(i, c_follower);
-    
   }
 }
 
@@ -138,26 +134,24 @@ void Terrain::updateHeights() {
       vector.y = (modulation / 4 > (meshResolution - 1) ? (meshResolution / 4 - 1) : modulation);
       gridMesh.setVertex(peeks[j], vector);
     }
-    range+=(peeks.size() / getBands());
+    range += (peeks.size() / getBands());
     setHorizontalColor();
   }
 }
 
 void Terrain::setColors(ofColor start, ofColor end) {
-  
+
   int steps = meshResolution / 4;
   float n = 0;
   unsigned char r, g, b;
   
-  for(int i = 1; i <= steps; i++ )
-  {
-    n = (float) i / (float) (steps-1);
-    r = (float) start.r  * (1.0f-n) + (float) end.r * n;
-    g = (float) start.g * (1.0f-n) + (float) end.g * n;
-    b = (float) start.b * (1.0f-n) + (float) end.b * n;
-    ofColor t(r,g,b);
+  for(int i = 1; i <= steps; i++ ) {
+    n = (float) i / (steps - 1);
+    r = (float) start.r  * (1.0f - n) + (float) end.r * n;
+    g = (float) start.g * (1.0f - n) + (float) end.g * n;
+    b = (float) start.b * (1.0f - n) + (float) end.b * n;
+    ofColor t(r, g, b);
     color_array[i - 1] = t;
-    
   }
 }
 
@@ -199,16 +193,17 @@ void Terrain::keyPressed(int key) {
 }
 
 void Terrain::switchLowerColor(int i) {
-  if (i > 10)
+  if (i > 10) {
     indexLow = 0;
+  }
   begin.set(colorPalette[i]); 
   setColors(begin, end);
 }
 
 void Terrain::switchUpperColor(int i) {
-  if (i > 10)
+  if (i > 10) {
     indexHigh = 0;
+  }
   end.set(colorPalette[i]); 
   setColors(begin, end);
 }
-

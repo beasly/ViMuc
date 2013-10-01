@@ -12,11 +12,10 @@
  * fft values.
  */
 Scene::Scene() {
-  
   nBands = 10;
   filter = 1;
   smoothingFactor = 0.97f;
-  
+
   fftPlain = new float[128];
   fftSmooth = new float[128];
   fill_n(fftSmooth, sizeof(fftSmooth), 0);

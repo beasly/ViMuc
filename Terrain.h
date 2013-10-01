@@ -1,12 +1,12 @@
 #pragma once
 #include "ofMain.h"
 #include <algorithm>
-#define _USE_MATH_DEFINES
 #include <math.h>
 #include "Scene.h"
 
-class Terrain : public Scene{
+#define _USE_MATH_DEFINES
 
+class Terrain : public Scene {
 
 private:
   typedef Scene super;
@@ -36,7 +36,6 @@ private:
   void setHorizontalColor();
 
 public:
-
   Terrain();
   void keyPressed(int key);
   void update();
