@@ -39,7 +39,7 @@ void Galaxy::setup() {
       planet->setRotationAngle(ofRandom(360));
       planet->setRotationSpeed((float) rand() / RAND_MAX + 0.01);
       planet->setPositionOfSun(galaxyList.at(0)->getPosition());
-      position.set(ofRandom(60 + 40 * i, 80 + 40 * i), ofRandom(-10, 10), 0);//ofRandom(60 + 20 * i, 80 + 20 * i));
+      position.set(ofRandom(60 + 40 * i, 80 + 40 * i), ofRandom(-10, 10), 0);
     }
 
     planet->setPosition(position);
