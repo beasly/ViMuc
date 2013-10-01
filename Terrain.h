@@ -8,13 +8,26 @@
 #include "Scene.h"
 
 
-using namespace std;
-
 class Terrain : public Scene{
 
 
 private:
   typedef Scene super;
+  
+  //Sauber
+  
+
+  
+  //Wichte Attribute
+  
+  ofEasyCam cam; // camera
+  int dist; // camera distance
+  bool drawMode; // grid or draw
+  int speed; // speed
+ 
+  
+  
+  
   
   
   int lowest_height;
@@ -29,6 +42,7 @@ private:
   //float *fftSmooth;
   ofVboMesh gridMesh;
   ofLight light;
+  ofLight light_left;
   
   int framecounter;
 
@@ -36,7 +50,7 @@ private:
 
   float modu;
 
-  void test();
+  void updateHeights();
   int gridRows;
   int gridColumns;
   vector<vector<vector<float> > > gridPoints;
@@ -52,14 +66,23 @@ private:
   
   ofColor color_array[200];
   void update_colors();
+  
 
 public:
 
-  // ofMesh gridMesh;
   Terrain();
-  //void update();
-  void draw();
+  
+  //Überschriebene Methoden
+  void keyPressed(int key);
   void update();
+  void setup();
+  void draw();
+
+  
+  
+  
+  
+  
   void setBands(int bands);
   void gridSurfaceSetup();
   void set_sinus_heights();
@@ -85,6 +108,13 @@ public:
   
   ofVec3f get_bezier(float t, ofVec3f point_a, ofVec3f point_b, ofVec3f point_c, ofVec3f point_d);
   void set_horizontal_color();
-
+  vector<vector<float> > smoothTerrain(int passes, vector<vector<float> > height_data);
+  
+  void startSmoothing();
+  vector<vector<float> > makeHeightData(); 
+  void updateHeightData(vector<vector<float> > height_data);
+  vector<vector<float> > initializeHeightMap(int meshResolution);
+  void test_smooth();
+  float cat_mull(float point1_y, float point2_y, float point3_y, float point4_y, float time);
 
 };
